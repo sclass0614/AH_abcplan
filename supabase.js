@@ -13,6 +13,9 @@ function initSupabase() {
     return supabaseClient;
 }
 
+// ✅ 전역으로 등록
+window.supabase = initSupabase();
+
 /**
  * 모든 계획 데이터를 가져오는 함수
  * @returns {Promise<Array>} 계획 데이터 배열
