@@ -19,9 +19,7 @@
     <script src="supabase.js"></script>
     <script type="module" src="https://sclass0614.github.io/authCheck/authCheck.js"></script>
 
-    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> -->
+
 </head>
 
 <body>
@@ -1398,6 +1396,11 @@
                 .then(data => {
                     // 모든 데이터 저장
                     allActivityData = data || [];
+                    
+                    // 활동명 기준으로 오름차순 정렬
+                    allActivityData.sort((a, b) => {
+                        return a.활동명.localeCompare(b.활동명, 'ko-KR');
+                    });
 
                     // 현재 필터 적용
                     const filterValue = document.getElementById('picFilterInput').value.trim().toLowerCase();
@@ -1684,7 +1687,7 @@
                         <thead>
                             <tr>
                                 <th>활동명</th>
-                                <th>URL 주소</th>
+                                <th>URL주소</th>
                                 <th>작업</th>
                             </tr>
                         </thead>
