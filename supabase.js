@@ -2,6 +2,11 @@
 const SUPABASE_URL = "https://dfomeijvzayyszisqflo.supabase.co";
 const SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRmb21laWp2emF5eXN6aXNxZmxvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4NjYwNDIsImV4cCI6MjA2MDQ0MjA0Mn0.-r1iL04wvPNdBeIvgxqXLF2rWqIUX5Ot-qGQRdYo_qk";
 
+// 테이블 이름 상수
+const PLAN_TABLE = "activities_plan";
+const EMPLOYEE_TABLE = "employeesinfo";
+const ACTIVITYPIC_TABLE = "abc_activitypic";
+
 // Supabase 클라이언트 초기화
 let supabaseClient;
 
@@ -26,7 +31,7 @@ async function getPlanAll() {
         
         // 모든 필드 이름을 명시적으로 지정하여 쿼리
         const { data, error } = await supabase
-            .from('activities_plan')
+            .from(PLAN_TABLE)
             .select(`
                 계획_id,
                 날짜,
@@ -107,7 +112,7 @@ async function getAllEmployees() {
     try {
         const supabase = initSupabase();
         const { data, error } = await supabase
-            .from('employeesinfo')
+            .from(EMPLOYEE_TABLE)
             .select('직원번호, 직원명, 계약시작일, 계약종료일');
 
         if (error) throw error;
@@ -198,7 +203,7 @@ async function appendPlan(planData) {
         console.log("저장할 데이터:", data);
         
         const { error } = await supabase
-            .from('activities_plan')
+            .from(PLAN_TABLE)
             .insert([data]);
             
         if (error) throw error;
@@ -220,7 +225,7 @@ async function deletePlanrow(planId) {
         const supabase = initSupabase();
         
         const { error } = await supabase
-            .from('activities_plan')
+            .from(PLAN_TABLE)
             .delete()
             .eq('계획_id', planId);
             
@@ -281,7 +286,7 @@ async function updatePlan(planId, planData) {
         console.log("업데이트할 계획 ID:", planId);
         
         const { error } = await supabase
-            .from('activities_plan')
+            .from(PLAN_TABLE)
             .update(data)
             .eq('계획_id', planId);
             
@@ -292,4 +297,110 @@ async function updatePlan(planId, planData) {
         console.error("계획 수정 오류:", error);
         throw new Error("수정 중 오류가 발생했습니다: " + error.message);
     }
+}
+
+/**
+ * 활동 사진 URL 데이터를 가져오는 함수
+ * @returns {Promise<Array>} 활동 사진 데이터 배열
+ */
+async function fetchActivityPics() {
+  const supabase = initSupabase();
+  try {
+    const { data, error } = await supabase
+      .from(ACTIVITYPIC_TABLE)
+      .select('pic_id, 활동명, url주소, created_at');
+      
+    if (error) {
+      console.error('데이터 가져오기 오류:', error);
+      return [];
+    }
+    return data;
+  } catch (error) {
+    console.error('활동 사진 데이터 로드 중 예외 발생:', error);
+    return [];
+  }
+}
+
+/**
+ * 새로운 활동 사진 URL을 추가하는 함수
+ * @param {string} activityName - 활동명
+ * @param {string} picUrl - 사진 URL
+ * @returns {Promise<Object|boolean>} 저장된 데이터 또는 실패 시 false
+ */
+async function addActivityPic(activityName, picUrl) {
+  const supabase = initSupabase();
+  try {
+    const { data, error } = await supabase
+      .from(ACTIVITYPIC_TABLE)
+      .insert([
+        { 
+          활동명: activityName, 
+          url주소: picUrl 
+        }
+      ])
+      .select();
+      
+    if (error) {
+      console.error('데이터 추가 오류:', error);
+      return false;
+    }
+    return data;
+  } catch (error) {
+    console.error('활동 사진 추가 중 예외 발생:', error);
+    return false;
+  }
+}
+
+/**
+ * 활동 사진 URL 데이터를 수정하는 함수
+ * @param {number|string} id - 수정할 항목의 ID
+ * @param {string} activityName - 새로운 활동명
+ * @param {string} picUrl - 새로운 사진 URL
+ * @returns {Promise<Object|boolean>} 수정된 데이터 또는 실패 시 false
+ */
+async function updateActivityPic(id, activityName, picUrl) {
+  const supabase = initSupabase();
+  try {
+    const { data, error } = await supabase
+      .from(ACTIVITYPIC_TABLE)
+      .update({ 
+        활동명: activityName, 
+        url주소: picUrl 
+      })
+      .eq('pic_id', id)
+      .select();
+      
+    if (error) {
+      console.error('데이터 수정 오류:', error);
+      return false;
+    }
+    return data;
+  } catch (error) {
+    console.error('활동 사진 수정 중 예외 발생:', error);
+    return false;
+  }
+}
+
+/**
+ * 활동 사진 URL 데이터를 삭제하는 함수
+ * @param {number|string} id - 삭제할 항목의 ID
+ * @returns {Promise<boolean>} 삭제 성공 여부
+ */
+async function deleteActivityPic(id) {
+  const supabase = initSupabase();
+  try {
+    const { error } = await supabase
+      .from(ACTIVITYPIC_TABLE)
+      .delete()
+      .eq('pic_id', id);
+      
+    if (error) {
+      console.error('데이터 삭제 오류:', error);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('활동 사진 삭제 중 예외 발생:', error);
+    return false;
+  }
 } 

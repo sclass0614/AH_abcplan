@@ -2,24 +2,29 @@
 
 <html lang="ko">
 
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>우리집 DayCareCenter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Google Fonts 추가 - Noto Sans KR 폰트를 사용하여 한글 표시 최적화 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
     <!-- Supabase 클라이언트 라이브러리 추가 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- 사용자 정의 Supabase 스크립트 -->
     <script src="supabase.js"></script>
-    <script type="module" src="https://sclass0614.github.io/authCheck/authCheck.js"></script>
-  </head>
+    <!-- <script type="module" src="https://sclass0614.github.io/authCheck/authCheck.js"></script> -->
 
-  <body>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> -->
+</head>
+
+<body>
     <!-- 로딩 오버레이 추가 -->
     <div id="loadingOverlay">
         <div class="loader"></div>
@@ -32,307 +37,281 @@
     <header id="main-header">
         <h1 id="app-title">
             <i class="fas fa-home header-icon"></i>
-        우리집 DayCareCenter
-      </h1>
+            우리집 DayCareCenter
+        </h1>
     </header>
 
     <!-- 소분류코드 선택 모달 -->
     <div id="subcategoryCodeModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h3 id="code-modal-title">소분류코드 선택</h3>
                 <span id="close-code-modal" class="close-modal">&times;</span>
-        </div>
+            </div>
             <input type="text" id="codeSearchBox" class="search-box" placeholder="코드 검색..." />
-        <div class="code-list-container">
-            <div class="code-group">
-                <div class="code-group-title">d1 - 학습과지식적용</div>
-                <ul class="code-list">
-                    <li data-code="d110">d110-보기</li>
-                    <li data-code="d115">d115-듣기</li>
-                    <li data-code="d120">d120-기타 의도적 감각</li>
-                    <li data-code="d129">d129-기타 상세불명 감각</li>
-                    <li data-code="d130">d130-모방하기</li>
-                    <li data-code="d135">d135-반복연습하기</li>
-                    <li data-code="d137">d137-개념습득하기</li>
-                    <li data-code="d140">d140-읽기학습</li>
-                    <li data-code="d145">d145-쓰기학습</li>
-                    <li data-code="d150">d150-연산학습</li>
-                    <li data-code="d155">d155-기술 습득하기</li>
-                    <li data-code="d159">d159-기타 기본학습</li>
-                    <li data-code="d160">d160-주의집중하기</li>
-                    <li data-code="d163">d163-생각하기</li>
-                    <li data-code="d166">d166-읽기</li>
-                    <li data-code="d170">d170-쓰기</li>
-                    <li data-code="d172">d172-계산하기</li>
-                    <li data-code="d175">d175-문제해결하기</li>
-                    <li data-code="d177">d177-의사결정하기</li>
-                    <li data-code="d179">d179-기타 지식적용1</li>
-                    <li data-code="d198">d198-기타 지식적용2</li>
-                    <li data-code="d199">d199-기타 지식적용3</li>
-                </ul>
+            <div class="code-list-container">
+                <div class="code-group">
+                    <div class="code-group-title">d1 - 학습과지식적용</div>
+                    <ul class="code-list">
+                        <li data-code="d110">d110-보기</li>
+                        <li data-code="d115">d115-듣기</li>
+                        <li data-code="d120">d120-기타 의도적 감각</li>
+                        <li data-code="d129">d129-기타 상세불명 감각</li>
+                        <li data-code="d130">d130-모방하기</li>
+                        <li data-code="d135">d135-반복연습하기</li>
+                        <li data-code="d137">d137-개념습득하기</li>
+                        <li data-code="d140">d140-읽기학습</li>
+                        <li data-code="d145">d145-쓰기학습</li>
+                        <li data-code="d150">d150-연산학습</li>
+                        <li data-code="d155">d155-기술 습득하기</li>
+                        <li data-code="d159">d159-기타 기본학습</li>
+                        <li data-code="d160">d160-주의집중하기</li>
+                        <li data-code="d163">d163-생각하기</li>
+                        <li data-code="d166">d166-읽기</li>
+                        <li data-code="d170">d170-쓰기</li>
+                        <li data-code="d172">d172-계산하기</li>
+                        <li data-code="d175">d175-문제해결하기</li>
+                        <li data-code="d177">d177-의사결정하기</li>
+                        <li data-code="d179">d179-기타 지식적용1</li>
+                        <li data-code="d198">d198-기타 지식적용2</li>
+                        <li data-code="d199">d199-기타 지식적용3</li>
+                    </ul>
+                </div>
+                <div class="code-group">
+                    <div class="code-group-title">d2 - 일반적과제와요구</div>
+                    <ul class="code-list">
+                        <li data-code="d210">d210-단일 과제수행하기</li>
+                        <li data-code="d220">d220-다중 과제수행하기</li>
+                        <li data-code="d230">d230-일상생활 수행하기</li>
+                        <li data-code="d2301">d2301-일상생활 관리하기</li>
+                        <li data-code="d2302">d2302-일상생활 완료하기</li>
+                        <li data-code="d2303">d2303-자신의 활동수준 관리하기</li>
+                        <li data-code="d2308">d2308-기타 명시된 일상생활 수행하기</li>
+                        <li data-code="d2309">d2309-상세불명의 일상생활 수행하기</li>
+                        <li data-code="d240">d240-스트레스 관리</li>
+                        <li data-code="d298">d298-기타 과제/요구</li>
+                        <li data-code="d299">d299-상세불명 과제/요구</li>
+                    </ul>
+                </div>
+                <div class="code-group">
+                    <div class="code-group-title">d3 - 의사소통</div>
+                    <ul class="code-list">
+                        <li data-code="d310">d310-음성 의사소통</li>
+                        <li data-code="d315">d315-비언어적 의사소통</li>
+                        <li data-code="d320">d320-공식적 수화 의사소통</li>
+                        <li data-code="d325">d325-문자메시지로 의사소통</li>
+                        <li data-code="d329">d329-기타 의사소통</li>
+                        <li data-code="d330">d330-말하기</li>
+                        <li data-code="d332">d332-노래부르기</li>
+                        <li data-code="d335">d335-비언어적 표현</li>
+                        <li data-code="d340">d340-공식적 수화 표현</li>
+                        <li data-code="d345">d345-메시지 쓰기</li>
+                        <li data-code="d349">d349-기타 의사소통 표현</li>
+                        <li data-code="d350">d350-대화</li>
+                        <li data-code="d355">d355-토론</li>
+                        <li data-code="d360">d360-의사소통장치/기술사용</li>
+                        <li data-code="d369">d369-기타소통1</li>
+                        <li data-code="d398">d398-기타소통2</li>
+                        <li data-code="d399">d399-기타소통3</li>
+                    </ul>
+                </div>
+                <div class="code-group">
+                    <div class="code-group-title">d4 - 이동</div>
+                    <ul class="code-list">
+                        <li data-code="d410">d410-기본자세 바꾸기</li>
+                        <li data-code="d415">d415-자세 유지하기</li>
+                        <li data-code="d420">d420-자리이동하기</li>
+                        <li data-code="d429">d429-기타 자세 바꾸기/유지</li>
+                        <li data-code="d430">d430-물건 들고나르기</li>
+                        <li data-code="d435">d435-다리로 물건 옮기기</li>
+                        <li data-code="d440">d440-손의 섬세한 사용</li>
+                        <li data-code="d445">d445-손과팔의사용</li>
+                        <li data-code="d449">d449-기타 물건나르기</li>
+                        <li data-code="d450">d450-걷기</li>
+                        <li data-code="d455">d455-이동하기</li>
+                        <li data-code="d460">d460-다양한 장소에서 이동</li>
+                        <li data-code="d465">d465-장비를 사용 이동</li>
+                        <li data-code="d469">d469-기타 걷기와 이동</li>
+                        <li data-code="d470">d470-교통수단 이용하기</li>
+                        <li data-code="d475">d475-운전하기</li>
+                        <li data-code="d480">d480-교통수단으로서 동물타기</li>
+                        <li data-code="d489">d489-기타 교통수단 이용이동</li>
+                        <li data-code="d498">d498-기타 명시된 이동</li>
+                        <li data-code="d499">d499-상세불명의 이동</li>
+                    </ul>
+                </div>
+                <div class="code-group">
+                    <div class="code-group-title">d5 - 자기관리</div>
+                    <ul class="code-list">
+                        <li data-code="d510">d510-씻기</li>
+                        <li data-code="d520">d520-신체일부 관리하기</li>
+                        <li data-code="d5200">d5200-피부 관리하기</li>
+                        <li data-code="d5201">d5201-치아 관리하기</li>
+                        <li data-code="d5202">d5202-털 관리하기</li>
+                        <li data-code="d5203">d5203-손톱 관리하기</li>
+                        <li data-code="d5204">d5204-발톱 관리하기</li>
+                        <li data-code="d5205">d5205-코 관리하기</li>
+                        <li data-code="d5208">d5208-기타 명시된 신체일부 관리하기</li>
+                        <li data-code="d5209">d5209-상세불명의 신체일부 관리하기</li>
+                        <li data-code="d530">d530-용변 관리하기</li>
+                        <li data-code="d540">d540-옷입고벗기</li>
+                        <li data-code="d550">d550-먹기</li>
+                        <li data-code="d560">d560-마시기</li>
+                        <li data-code="d570">d570-자신의 건강 돌보기</li>
+                        <li data-code="d5700">d5700-신체적 편안함 유지하기</li>
+                        <li data-code="d5701">d5701-식습관과 체력 관리하기</li>
+                        <li data-code="d5702">d5702-자신의 건강 유지하기</li>
+                        <li data-code="d5708">d5708-기타 명시된 자신의 건강 돌보기</li>
+                        <li data-code="d5709">d5709-상세불명의 자신의 건강돌보기</li>
+                        <li data-code="d598">d598-기타 명시된 자기관리</li>
+                        <li data-code="d599">d599-상세불명의 자기관리</li>
+                    </ul>
+                </div>
+                <div class="code-group">
+                    <div class="code-group-title">d6 - 가정생활</div>
+                    <ul class="code-list">
+                        <li data-code="d610">d610-주거 마련하기</li>
+                        <li data-code="d620">d620-상품과 서비스획득</li>
+                        <li data-code="d629">d629-기타 필수품 마련</li>
+                        <li data-code="d630">d630-식사준비하기</li>
+                        <li data-code="d6300">d6300-간단한 식사준비하기</li>
+                        <li data-code="d6301">d6301-복잡한 식사준비하기</li>
+                        <li data-code="d6308">d6308-기타 명시된 식사준비하기</li>
+                        <li data-code="d6309">d6309-상세불명의 식사준비하기</li>
+                        <li data-code="d640">d640-집안일하기</li>
+                        <li data-code="d6400">d6400-옷과 의류 세탁하기와 건조하기</li>
+                        <li data-code="d6401">d6401-주방과 조리 기구 세척하기</li>
+                        <li data-code="d6402">d6402-주거 공간 청소하기</li>
+                        <li data-code="d6403">d6403-가전제품 사용하기</li>
+                        <li data-code="d6404">d6404-생필품 보관하기</li>
+                        <li data-code="d6405">d6405-쓰레기 처리하기</li>
+                        <li data-code="d6408">d6408-기타 명시된 집안일 하기</li>
+                        <li data-code="d6409">d6409-상세불명의 집안일하기</li>
+                        <li data-code="d649">d649-기타 집안일</li>
+                        <li data-code="d650">d650-가정용품 관리하기</li>
+                        <li data-code="d6500">d6500-옷 만들기와 수선하기</li>
+                        <li data-code="d6501">d6501-주거와 가구류 유지하기</li>
+                        <li data-code="d6502">d6502-가전제품 유지하기</li>
+                        <li data-code="d6503">d6503-차량 유지하기</li>
+                        <li data-code="d6504">d6504-보조장치 유지하기</li>
+                        <li data-code="d6505">d6505-실내외 식물 돌보기</li>
+                        <li data-code="d6506">d6506-동물 돌보기</li>
+                        <li data-code="d6508">d6508-기타 명시된 가정용품 관리하기</li>
+                        <li data-code="d6509">d6509-상세불명의 가정용품 관리하기</li>
+                        <li data-code="d660">d660-타인 보조하기</li>
+                        <li data-code="d6600">d6600-타인의 자기관리 보조하기</li>
+                        <li data-code="d6601">d6601-타인의 이동 보조하기</li>
+                        <li data-code="d6602">d6602-타인의 의사소통 보조하기</li>
+                        <li data-code="d6603">d6603-타인의 대인관계 보조하기</li>
+                        <li data-code="d6604">d6604-타인의 영양관리 보조하기</li>
+                        <li data-code="d6605">d6605-타인의 건강관리 보조하기</li>
+                        <li data-code="d6608">d6608-기타 명시된 타인 보조하기</li>
+                        <li data-code="d6609">d6609-상세불명의 타인 보조하기</li>
+                        <li data-code="d669">d669-기타 가정용품 타인보조</li>
+                        <li data-code="d698">d698-기타 명시된 가정생활</li>
+                        <li data-code="d699">d699-상세불명의 가정생활</li>
+                    </ul>
+                </div>
+                <div class="code-group">
+                    <div class="code-group-title">d7 - 대인상호작용과대인관계</div>
+                    <ul class="code-list">
+                        <li data-code="d710">d710-기본적인 대인상호작용</li>
+                        <li data-code="d720">d720-복잡한 대인상호작용</li>
+                        <li data-code="d729">d729-기타 일반적대인상호작용</li>
+                        <li data-code="d730">d730-낯선사람과관계맺기</li>
+                        <li data-code="d740">d740-공식적인 관계</li>
+                        <li data-code="d750">d750-비공식적인 사회적 관계</li>
+                        <li data-code="d760">d760-가족관계</li>
+                        <li data-code="d770">d770-친밀한 관계</li>
+                        <li data-code="d779">d779-기타 대인1</li>
+                        <li data-code="d798">d798-기타 대인2</li>
+                        <li data-code="d799">d799-기타 대인3</li>
+                    </ul>
+                </div>
+                <div class="code-group">
+                    <div class="code-group-title">d8 - 주요생활영역</div>
+                    <ul class="code-list">
+                        <li data-code="d810">d810-비공식적인 교육</li>
+                        <li data-code="d815">d815-유아교육</li>
+                        <li data-code="d820">d820-학교교육</li>
+                        <li data-code="d825">d825-직업 훈련하기</li>
+                        <li data-code="d830">d830-고등교육</li>
+                        <li data-code="d835">d835-교육생활</li>
+                        <li data-code="d839">d839-기타 교육</li>
+                        <li data-code="d840">d840-견습과정(취업 준비)</li>
+                        <li data-code="d845">d845-구직/근속/퇴직</li>
+                        <li data-code="d850">d850-유급고용</li>
+                        <li data-code="d855">d855-무급고용</li>
+                        <li data-code="d859">d859-기타 일과고용</li>
+                        <li data-code="d860">d860-기본적인 경제거래</li>
+                        <li data-code="d865">d865-복잡한 경제거래</li>
+                        <li data-code="d870">d870-경제적 자립</li>
+                        <li data-code="d879">d879-기타 경제생활</li>
+                        <li data-code="d898">d898-기타 주된 삶의 영역</li>
+                        <li data-code="d899">d899-상세불명의 삶의 영역</li>
+                    </ul>
+                </div>
+                <div class="code-group">
+                    <div class="code-group-title">d9 - 지역,사회,시민생활</div>
+                    <ul class="code-list">
+                        <li data-code="d910">d910-지역사회생활</li>
+                        <li data-code="d920">d920-레크리에이션과 여가</li>
+                        <li data-code="d9200">d9200-놀이</li>
+                        <li data-code="d9201">d9201-스포츠</li>
+                        <li data-code="d9202">d9202-예술과 문화</li>
+                        <li data-code="d9203">d9203-공예</li>
+                        <li data-code="d9204">d9204-취미</li>
+                        <li data-code="d9205">d9205-사교</li>
+                        <li data-code="d9208">d9208-기타 명시된 레크레이션과 여가</li>
+                        <li data-code="d9209">d9209-상세불명의 레크레이션과 여가</li>
+                        <li data-code="d930">d930-종교및영성</li>
+                        <li data-code="d9300">d9300-조직화된 종교</li>
+                        <li data-code="d9301">d9301-영성</li>
+                        <li data-code="d9308">d9308-기타 명시된 종교 및 영성</li>
+                        <li data-code="d9309">d9309-상세불명의 종교 및 영성</li>
+                        <li data-code="d940">d940-인권</li>
+                        <li data-code="d950">d950-정치생활 및 시민권</li>
+                        <li data-code="d998">d998-기타 지역사회생활</li>
+                        <li data-code="d999">d999-상세불명 지역사회생활</li>
+                    </ul>
+                </div>
             </div>
-            <div class="code-group">
-                <div class="code-group-title">d2 - 일반적과제와요구</div>
-                <ul class="code-list">
-                    <li data-code="d210">d210-단일 과제수행하기</li>
-                    <li data-code="d220">d220-다중 과제수행하기</li>
-                    <li data-code="d230">d230-일상생활 수행하기</li>
-                    <li data-code="d2301">d2301-일상생활 관리하기</li>
-                    <li data-code="d2302">d2302-일상생활 완료하기</li>
-                    <li data-code="d2303">d2303-자신의 활동수준 관리하기</li>
-                    <li data-code="d2308">d2308-기타 명시된 일상생활 수행하기</li>
-                    <li data-code="d2309">d2309-상세불명의 일상생활 수행하기</li>
-                    <li data-code="d240">d240-스트레스 관리</li>
-                    <li data-code="d298">d298-기타 과제/요구</li>
-                    <li data-code="d299">d299-상세불명 과제/요구</li>
-                </ul>
-            </div>
-            <div class="code-group">
-                <div class="code-group-title">d3 - 의사소통</div>
-                <ul class="code-list">
-                    <li data-code="d310">d310-음성 의사소통</li>
-                    <li data-code="d315">d315-비언어적 의사소통</li>
-                    <li data-code="d320">d320-공식적 수화 의사소통</li>
-                    <li data-code="d325">d325-문자메시지로 의사소통</li>
-                    <li data-code="d329">d329-기타 의사소통</li>
-                    <li data-code="d330">d330-말하기</li>
-                    <li data-code="d332">d332-노래부르기</li>
-                    <li data-code="d335">d335-비언어적 표현</li>
-                    <li data-code="d340">d340-공식적 수화 표현</li>
-                    <li data-code="d345">d345-메시지 쓰기</li>
-                    <li data-code="d349">d349-기타 의사소통 표현</li>
-                    <li data-code="d350">d350-대화</li>
-                    <li data-code="d355">d355-토론</li>
-                    <li data-code="d360">d360-의사소통장치/기술사용</li>
-                    <li data-code="d369">d369-기타소통1</li>
-                    <li data-code="d398">d398-기타소통2</li>
-                    <li data-code="d399">d399-기타소통3</li>
-                </ul>
-            </div>
-            <div class="code-group">
-                <div class="code-group-title">d4 - 이동</div>
-                <ul class="code-list">
-                    <li data-code="d410">d410-기본자세 바꾸기</li>
-                    <li data-code="d415">d415-자세 유지하기</li>
-                    <li data-code="d420">d420-자리이동하기</li>
-                    <li data-code="d429">d429-기타 자세 바꾸기/유지</li>
-                    <li data-code="d430">d430-물건 들고나르기</li>
-                    <li data-code="d435">d435-다리로 물건 옮기기</li>
-                    <li data-code="d440">d440-손의 섬세한 사용</li>
-                    <li data-code="d445">d445-손과팔의사용</li>
-                    <li data-code="d449">d449-기타 물건나르기</li>
-                    <li data-code="d450">d450-걷기</li>
-                    <li data-code="d455">d455-이동하기</li>
-                    <li data-code="d460">d460-다양한 장소에서 이동</li>
-                    <li data-code="d465">d465-장비를 사용 이동</li>
-                    <li data-code="d469">d469-기타 걷기와 이동</li>
-                    <li data-code="d470">d470-교통수단 이용하기</li>
-                    <li data-code="d475">d475-운전하기</li>
-                    <li data-code="d480">d480-교통수단으로서 동물타기</li>
-                    <li data-code="d489">d489-기타 교통수단 이용이동</li>
-                    <li data-code="d498">d498-기타 명시된 이동</li>
-                    <li data-code="d499">d499-상세불명의 이동</li>
-                </ul>
-            </div>
-            <div class="code-group">
-                <div class="code-group-title">d5 - 자기관리</div>
-                <ul class="code-list">
-                    <li data-code="d510">d510-씻기</li>
-                    <li data-code="d520">d520-신체일부 관리하기</li>
-                    <li data-code="d5200">d5200-피부 관리하기</li>
-                    <li data-code="d5201">d5201-치아 관리하기</li>
-                    <li data-code="d5202">d5202-털 관리하기</li>
-                    <li data-code="d5203">d5203-손톱 관리하기</li>
-                    <li data-code="d5204">d5204-발톱 관리하기</li>
-                    <li data-code="d5205">d5205-코 관리하기</li>
-                    <li data-code="d5208">d5208-기타 명시된 신체일부 관리하기</li>
-                    <li data-code="d5209">d5209-상세불명의 신체일부 관리하기</li>
-                    <li data-code="d530">d530-용변 관리하기</li>
-                    <li data-code="d540">d540-옷입고벗기</li>
-                    <li data-code="d550">d550-먹기</li>
-                    <li data-code="d560">d560-마시기</li>
-                    <li data-code="d570">d570-자신의 건강 돌보기</li>
-                    <li data-code="d5700">d5700-신체적 편안함 유지하기</li>
-                    <li data-code="d5701">d5701-식습관과 체력 관리하기</li>
-                    <li data-code="d5702">d5702-자신의 건강 유지하기</li>
-                    <li data-code="d5708">d5708-기타 명시된 자신의 건강 돌보기</li>
-                    <li data-code="d5709">d5709-상세불명의 자신의 건강돌보기</li>
-                    <li data-code="d598">d598-기타 명시된 자기관리</li>
-                    <li data-code="d599">d599-상세불명의 자기관리</li>
-                </ul>
-            </div>
-            <div class="code-group">
-                <div class="code-group-title">d6 - 가정생활</div>
-                <ul class="code-list">
-                    <li data-code="d610">d610-주거 마련하기</li>
-                    <li data-code="d620">d620-상품과 서비스획득</li>
-                    <li data-code="d629">d629-기타 필수품 마련</li>
-                    <li data-code="d630">d630-식사준비하기</li>
-                    <li data-code="d6300">d6300-간단한 식사준비하기</li>
-                    <li data-code="d6301">d6301-복잡한 식사준비하기</li>
-                    <li data-code="d6308">d6308-기타 명시된 식사준비하기</li>
-                    <li data-code="d6309">d6309-상세불명의 식사준비하기</li>
-                    <li data-code="d640">d640-집안일하기</li>
-                    <li data-code="d6400">d6400-옷과 의류 세탁하기와 건조하기</li>
-                    <li data-code="d6401">d6401-주방과 조리 기구 세척하기</li>
-                    <li data-code="d6402">d6402-주거 공간 청소하기</li>
-                    <li data-code="d6403">d6403-가전제품 사용하기</li>
-                    <li data-code="d6404">d6404-생필품 보관하기</li>
-                    <li data-code="d6405">d6405-쓰레기 처리하기</li>
-                    <li data-code="d6408">d6408-기타 명시된 집안일 하기</li>
-                    <li data-code="d6409">d6409-상세불명의 집안일하기</li>
-                    <li data-code="d649">d649-기타 집안일</li>
-                    <li data-code="d650">d650-가정용품 관리하기</li>
-                    <li data-code="d6500">d6500-옷 만들기와 수선하기</li>
-                    <li data-code="d6501">d6501-주거와 가구류 유지하기</li>
-                    <li data-code="d6502">d6502-가전제품 유지하기</li>
-                    <li data-code="d6503">d6503-차량 유지하기</li>
-                    <li data-code="d6504">d6504-보조장치 유지하기</li>
-                    <li data-code="d6505">d6505-실내외 식물 돌보기</li>
-                    <li data-code="d6506">d6506-동물 돌보기</li>
-                    <li data-code="d6508">d6508-기타 명시된 가정용품 관리하기</li>
-                    <li data-code="d6509">d6509-상세불명의 가정용품 관리하기</li>
-                    <li data-code="d660">d660-타인 보조하기</li>
-                    <li data-code="d6600">d6600-타인의 자기관리 보조하기</li>
-                    <li data-code="d6601">d6601-타인의 이동 보조하기</li>
-                    <li data-code="d6602">d6602-타인의 의사소통 보조하기</li>
-                    <li data-code="d6603">d6603-타인의 대인관계 보조하기</li>
-                    <li data-code="d6604">d6604-타인의 영양관리 보조하기</li>
-                    <li data-code="d6605">d6605-타인의 건강관리 보조하기</li>
-                    <li data-code="d6608">d6608-기타 명시된 타인 보조하기</li>
-                    <li data-code="d6609">d6609-상세불명의 타인 보조하기</li>
-                    <li data-code="d669">d669-기타 가정용품 타인보조</li>
-                    <li data-code="d698">d698-기타 명시된 가정생활</li>
-                    <li data-code="d699">d699-상세불명의 가정생활</li>
-                </ul>
-            </div>
-            <div class="code-group">
-                <div class="code-group-title">d7 - 대인상호작용과대인관계</div>
-                <ul class="code-list">
-                    <li data-code="d710">d710-기본적인 대인상호작용</li>
-                    <li data-code="d720">d720-복잡한 대인상호작용</li>
-                    <li data-code="d729">d729-기타 일반적대인상호작용</li>
-                    <li data-code="d730">d730-낯선사람과관계맺기</li>
-                    <li data-code="d740">d740-공식적인 관계</li>
-                    <li data-code="d750">d750-비공식적인 사회적 관계</li>
-                    <li data-code="d760">d760-가족관계</li>
-                    <li data-code="d770">d770-친밀한 관계</li>
-                    <li data-code="d779">d779-기타 대인1</li>
-                    <li data-code="d798">d798-기타 대인2</li>
-                    <li data-code="d799">d799-기타 대인3</li>
-                </ul>
-            </div>
-            <div class="code-group">
-                <div class="code-group-title">d8 - 주요생활영역</div>
-                <ul class="code-list">
-                    <li data-code="d810">d810-비공식적인 교육</li>
-                    <li data-code="d815">d815-유아교육</li>
-                    <li data-code="d820">d820-학교교육</li>
-                    <li data-code="d825">d825-직업 훈련하기</li>
-                    <li data-code="d830">d830-고등교육</li>
-                    <li data-code="d835">d835-교육생활</li>
-                    <li data-code="d839">d839-기타 교육</li>
-                    <li data-code="d840">d840-견습과정(취업 준비)</li>
-                    <li data-code="d845">d845-구직/근속/퇴직</li>
-                    <li data-code="d850">d850-유급고용</li>
-                    <li data-code="d855">d855-무급고용</li>
-                    <li data-code="d859">d859-기타 일과고용</li>
-                    <li data-code="d860">d860-기본적인 경제거래</li>
-                    <li data-code="d865">d865-복잡한 경제거래</li>
-                    <li data-code="d870">d870-경제적 자립</li>
-                    <li data-code="d879">d879-기타 경제생활</li>
-                    <li data-code="d898">d898-기타 주된 삶의 영역</li>
-                    <li data-code="d899">d899-상세불명의 삶의 영역</li>
-                </ul>
-            </div>
-            <div class="code-group">
-                <div class="code-group-title">d9 - 지역,사회,시민생활</div>
-                <ul class="code-list">
-                    <li data-code="d910">d910-지역사회생활</li>
-                    <li data-code="d920">d920-레크리에이션과 여가</li>
-                    <li data-code="d9200">d9200-놀이</li>
-                    <li data-code="d9201">d9201-스포츠</li>
-                    <li data-code="d9202">d9202-예술과 문화</li>
-                    <li data-code="d9203">d9203-공예</li>
-                    <li data-code="d9204">d9204-취미</li>
-                    <li data-code="d9205">d9205-사교</li>
-                    <li data-code="d9208">d9208-기타 명시된 레크레이션과 여가</li>
-                    <li data-code="d9209">d9209-상세불명의 레크레이션과 여가</li>
-                    <li data-code="d930">d930-종교및영성</li>
-                    <li data-code="d9300">d9300-조직화된 종교</li>
-                    <li data-code="d9301">d9301-영성</li>
-                    <li data-code="d9308">d9308-기타 명시된 종교 및 영성</li>
-                    <li data-code="d9309">d9309-상세불명의 종교 및 영성</li>
-                    <li data-code="d940">d940-인권</li>
-                    <li data-code="d950">d950-정치생활 및 시민권</li>
-                    <li data-code="d998">d998-기타 지역사회생활</li>
-                    <li data-code="d999">d999-상세불명 지역사회생활</li>
-                </ul>
-            </div>
-          </div>
-      </div>
+        </div>
     </div>
 
-    <!-- 회원 선택 모달 -->
-    <div id="memberSelectModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-                <h3 id="member-modal-title">회원 선택</h3>
-                <span id="close-member-btn" class="close-member-modal">&times;</span>
-        </div>
-            <input type="text" id="memberSearchBox" class="search-box" placeholder="회원 검색 (이름 또는 회원번호)..." />
-            <div id="member-table-container" class="table-container modal-table-container">
-          <table class="list-table" id="member-list-table">
-            <thead>
-                        <tr id="member-list-header">
-                <th>회원번호</th>
-                <th>이름</th>
-                <th>생년월일</th>
-                <th>입소일</th>
-                <th>퇴소일</th>
-              </tr>
-            </thead>
-            <tbody id="member-list-body">
-              <!-- 회원 데이터가 여기에 동적으로 로드됩니다 -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
 
     <!-- 직원명 선택 모달 -->
     <div id="staffSelectModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h3 id="staff-modal-title">직원명 선택</h3>
                 <span id="close-staff-btn" class="close-staff-modal">&times;</span>
-        </div>
+            </div>
             <input type="text" id="staffSearchBox" class="search-box" placeholder="직원명 검색 (이름 또는 직원번호)..." />
             <div id="staff-table-container" class="table-container modal-table-container">
-          <table class="list-table" id="staff-list-table">
-            <thead>
+                <table class="list-table" id="staff-list-table">
+                    <thead>
                         <tr id="staff-list-header">
-                <th>직원번호</th>
-                <th>이름</th>
-              </tr>
-            </thead>
-            <tbody id="staff-list-body">
-              <!-- 직원명 데이터가 여기에 동적으로 로드됩니다 -->
-            </tbody>
-          </table>
-        </div>
+                            <th>직원번호</th>
+                            <th>이름</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staff-list-body">
+                        <!-- 직원명 데이터가 여기에 동적으로 로드됩니다 -->
+                    </tbody>
+                </table>
+            </div>
             <div class="staff-button-container">
                 <button id="resetManagerBtn" class="btn-icon">초기화</button>
+            </div>
         </div>
-      </div>
     </div>
 
     <main id="app-main">
-      <!-- ==========================================================================
+        <!-- ==========================================================================
          [5] Page 1: Daily Plan
          ========================================================================== -->
-      <section class="page active" id="page1">
+        <section class="page active" id="page1">
             <div id="plan-header" class="header-container">
                 <h2 id="plan-title">Daily Plan</h2>
                 <div id="date-search" class="date-search-container">
@@ -340,14 +319,14 @@
                         <input type="date" id="datePicker" class="form-control" onchange="makeTable_plan()" />
                         <button type="button" id="btn-plan-search" class="btn btn-primary">
                             <i class="fas fa-sync-alt"></i> Update
-            </button>
-          </div>
-        </div>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div id="plan-table-container" class="panel thick-border">
-          <div class="table-container">
-            <table class="list-table" id="daily-plan-table">
-              <thead>
+                <div class="table-container">
+                    <table class="list-table" id="daily-plan-table">
+                        <thead>
                             <tr id="plan-table-header">
                                 <!-- <th>계획_ID</th> -->
                                 <th>날짜</th>
@@ -360,84 +339,84 @@
                                 <th>준비물품</th>
                                 <th>내용및특이사항</th>
                                 <th>활동기록</th>
-                </tr>
-              </thead>
-              <tbody id="table-body">
-                <!-- 동적 데이터 로드 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- 동적 데이터 로드 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        <!-- 입력 영역: Plan Entry / Result Entry / Notice -->
+            <!-- 입력 영역: Plan Entry / Result Entry / Notice -->
             <div id="form-panels" class="three-panel">
-          <!-- Plan Entry -->
+                <!-- Plan Entry -->
                 <div id="plan-entry-panel" class="panel">
                     <h3 id="plan-entry-title">Plan Entry</h3>
                     <div id="id-date-row" class="row-2col">
-              <div class="col-2">
+                        <div class="col-2">
                             <label id="plan-date-label" for="planDate">날짜(조회)</label>
                             <input type="text" id="planDate" placeholder="우측상단 날짜 선택 후 조회" readonly />
-              </div>
+                        </div>
                         <div class="col-2" style="visibility: hidden">
                             <label id="plan-id-label" for="planId">계획_ID(자동입력)</label>
                             <input type="text" id="planId" placeholder="계획_ID 입력중..." readonly />
-              </div>
-            </div>
+                        </div>
+                    </div>
                     <div id="time-row" class="row-2col">
-              <div class="col-2">
+                        <div class="col-2">
                             <label id="start-time-label" for="startTime">시작시간</label>
                             <input type="text" id="startTime" placeholder="시간 입력중... ex)0920" />
-              </div>
-              <div class="col-2">
+                        </div>
+                        <div class="col-2">
                             <label id="end-time-label" for="endTime">종료시간</label>
                             <input type="text" id="endTime" placeholder="시간 입력중... ex)1800" />
-              </div>
-            </div>
+                        </div>
+                    </div>
                     <div id="activity-row" class="row-2col">
-              <div class="col-2">
+                        <div class="col-2">
                             <label id="activity-name-label" for="activityName">활동명</label>
                             <input type="text" id="activityName" placeholder="활동명 입력중..." />
-              </div>
-              <div class="col-2">
+                        </div>
+                        <div class="col-2">
                             <label id="code-label" for="subcategoryCode">소분류코드</label>
                             <input type="text" id="subcategoryCode" placeholder="클릭!" class="clickable-input"
                                 readonly />
-              </div>
-            </div>
+                        </div>
+                    </div>
                     <div id="staff-place-row" class="row-2col">
-              <div class="col-2">
+                        <div class="col-2">
                             <label id="employee-id-label" for="employeeId">직원번호</label>
                             <input type="text" id="employeeId" placeholder="직원명 클릭" readonly />
                         </div>
                         <div class="col-2">
                             <label id="manager-label" for="manager">직원명</label>
-                <input type="text" id="manager" placeholder="클릭!" readonly />
-              </div>
+                            <input type="text" id="manager" placeholder="클릭!" readonly />
+                        </div>
                     </div>
                     <div id="activity-place-row" class="row-2col">
-              <div class="col-2">
+                        <div class="col-2">
                             <label id="place-label" for="activityPlace">활동장소</label>
                             <input type="text" id="activityPlace" placeholder="활동장소 입력중..." />
-              </div>
+                        </div>
                         <div class="col-2">
                             <label id="preparation-label" for="preparation">준비물</label>
                             <input type="text" id="preparation" placeholder="준비물 입력중..." />
-            </div>
+                        </div>
                     </div>
                     <label id="details-label" for="details">내용및특이사항</label>
                     <input type="text" id="details" placeholder="내용 및 특이사항 입력중..." />
                     <label id="image-url-label" for="imageUrl">참고사진URL</label>
-                    <input type="text" id="imageUrl" placeholder="참고사진 URL을 입력하세요." />
-          </div>
+                    <input type="text" id="imageUrl" placeholder="클릭!" readonly class="clickable-input" />
+                </div>
 
-          <!-- Result Entry -->
+                <!-- Result Entry -->
                 <div id="result-entry-panel" class="panel">
                     <h3 id="result-entry-title">Result Entry</h3>
                     <textarea id="resultEntryTextarea" rows="14" placeholder="결과 내용을 입력..."></textarea>
-          </div>
+                </div>
 
-          <!-- Notice -->
+                <!-- Notice -->
                 <div id="notice-panel" class="panel relative-panel">
                     <h3 id="notice-title">Notice</h3>
                     <textarea id="noticeTextarea" rows="14" placeholder="누락된 사항이 없습니다." class="notice-textarea"
@@ -445,68 +424,68 @@
                     <div id="form-buttons" class="bottom-buttons absolute-buttons">
                         <button id="btn-plan-reset" onclick="resetAllFields()">
                             초기화
-              </button>
+                        </button>
                         <button id="btn-plan-save">저장</button>
                         <button id="btn-plan-modify">
-                수정
-              </button>
+                            수정
+                        </button>
                         <button id="btn-plan-delete">삭제</button>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </section>
-      <!-- 커스텀 확인 대화상자 컨테이너 -->
-      <div id="customConfirm" class="custom-alert">
+        </section>
+        <!-- 커스텀 확인 대화상자 컨테이너 -->
+        <div id="customConfirm" class="custom-alert">
             <div id="confirm-content" class="custom-alert-content">
                 <div id="confirm-header" class="custom-alert-header confirm-header">
                     <i id="confirm-icon" class="fas fa-exclamation-triangle"></i>
                     <span id="confirm-title">확인</span>
                     <button id="close-confirm-x" onclick="closeCustomConfirm(false)" class="close-alert">
-              &times;
-            </button>
-          </div>
+                        &times;
+                    </button>
+                </div>
                 <div id="confirm-body" class="custom-alert-body">
-            <p id="customConfirmMessage"></p>
-          </div>
+                    <p id="customConfirmMessage"></p>
+                </div>
                 <div id="confirm-footer" class="custom-alert-footer">
                     <button id="confirm-cancel-btn" onclick="closeCustomConfirm(false)" class="alert-cancel-btn">
-              취소
-            </button>
+                        취소
+                    </button>
                     <button id="confirm-ok-btn" onclick="closeCustomConfirm(true)"
                         class="alert-confirm-btn confirm-btn">
-              확인
-            </button>
-          </div>
+                        확인
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    <!-- 커스텀 알림 컨테이너 -->
-    <div id="customAlert" class="custom-alert">
+        <!-- 커스텀 알림 컨테이너 -->
+        <div id="customAlert" class="custom-alert">
             <div id="alert-content" class="custom-alert-content">
                 <div id="alert-header" class="custom-alert-header">
                     <i id="alert-icon" class="fas fa-info-circle"></i>
                     <span id="alert-title">알림</span>
                     <button id="close-alert-x" onclick="closeCustomAlert()" class="close-alert">
-                    &times;
-                </button>
-            </div>
+                        &times;
+                    </button>
+                </div>
                 <div id="alert-body" class="custom-alert-body">
-                <p id="customAlertMessage"></p>
-            </div>
+                    <p id="customAlertMessage"></p>
+                </div>
                 <div id="alert-footer" class="custom-alert-footer">
                     <button id="alert-ok-btn" onclick="closeCustomAlert()" class="alert-confirm-btn">
-                    확인
-                </button>
+                        확인
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+
+        
     </main>
 
     <!-- ==========================================================================
        [7] JavaScript: 함수 모듈화 및 이벤트 처리
        ========================================================================== -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
         // 로딩 표시 함수들 추가
         function showLoading() {
@@ -543,21 +522,21 @@
 
         async function initialize() {
             showLoading(); // 초기화 시작 시 로딩 표시
-            
+
             try {
                 // 두 작업을 병렬로 실행하기 위해 Promise.all 사용
                 const results = await Promise.all([
                     getPlanAllPromise(),
                     getEmployeesPromise()
                 ]);
-                
+
                 // 결과 할당
                 dailyPlanAll = results[0];
                 employeeall = results[1];
-                
+
                 console.log("데이터 로드 완료");
                 console.log(dailyPlanAll);
-                console.log(employeeall); 
+                console.log(employeeall);
                 console.log("데이터 로드 완료 확인");
 
                 // 데이터 로드 후 테이블 생성
@@ -784,7 +763,7 @@
 
                 // 입력 필드의 날짜 설정
                 document.getElementById("planDate").value = selectedDate;
-                
+
                 // 데이터가 없을 때는 notice 초기화
                 document.getElementById("noticeTextarea").value = "";
                 return;
@@ -832,7 +811,7 @@
         }
 
         // 테이블 헤더 클릭 이벤트 설정
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
             const headers = document.querySelectorAll("#plan-table-header th");
             headers.forEach((header, index) => {
@@ -935,48 +914,48 @@
          * 검색어에 따라 관련 코드만 표시
          * 검색어가 없을 경우 모든 코드 표시
        */
-      function filterCodes(searchTerm) {
-        searchTerm = searchTerm.toLowerCase();
-        const codeListItems = document.querySelectorAll(".code-list li");
+        function filterCodes(searchTerm) {
+            searchTerm = searchTerm.toLowerCase();
+            const codeListItems = document.querySelectorAll(".code-list li");
 
-        if (searchTerm === "") {
-          document
-            .querySelectorAll(".code-group")
-            .forEach((group) => (group.style.display = ""));
-          codeListItems.forEach((item) => (item.style.display = ""));
-        } else {
-          document.querySelectorAll(".code-group").forEach((group) => {
-            group.style.display = "";
-            const items = group.querySelectorAll(".code-list li");
-            let hasVisibleItems = false;
-            items.forEach((item) => {
-              const text = item.textContent.toLowerCase();
-              if (text.includes(searchTerm)) {
-                item.style.display = "";
-                hasVisibleItems = true;
-              } else {
-                item.style.display = "none";
-              }
-            });
-            if (!hasVisibleItems) group.style.display = "none";
-          });
+            if (searchTerm === "") {
+                document
+                    .querySelectorAll(".code-group")
+                    .forEach((group) => (group.style.display = ""));
+                codeListItems.forEach((item) => (item.style.display = ""));
+            } else {
+                document.querySelectorAll(".code-group").forEach((group) => {
+                    group.style.display = "";
+                    const items = group.querySelectorAll(".code-list li");
+                    let hasVisibleItems = false;
+                    items.forEach((item) => {
+                        const text = item.textContent.toLowerCase();
+                        if (text.includes(searchTerm)) {
+                            item.style.display = "";
+                            hasVisibleItems = true;
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
+                    if (!hasVisibleItems) group.style.display = "none";
+                });
+            }
         }
-      }
 
         function resetAllFields() {
             // 모든 입력 필드 초기화
-        document.getElementById("planId").value = "";
-        document.getElementById("startTime").value = "";
-        document.getElementById("endTime").value = "";
+            document.getElementById("planId").value = "";
+            document.getElementById("startTime").value = "";
+            document.getElementById("endTime").value = "";
             document.getElementById("employeeId").value = ""; // 직원번호 필드 초기화 추가
-        document.getElementById("activityName").value = "";
-        document.getElementById("subcategoryCode").value = "";
+            document.getElementById("activityName").value = "";
+            document.getElementById("subcategoryCode").value = "";
             document.getElementById("manager").value = "";
-        document.getElementById("activityPlace").value = "";
-        document.getElementById("preparation").value = "";
-        document.getElementById("details").value = "";
-        document.getElementById("resultEntryTextarea").value = "";
-        document.getElementById("imageUrl").value = "";
+            document.getElementById("activityPlace").value = "";
+            document.getElementById("preparation").value = "";
+            document.getElementById("details").value = "";
+            document.getElementById("resultEntryTextarea").value = "";
+            document.getElementById("imageUrl").value = "";
 
             // 버튼 상태 업데이트 - 저장 활성화, 수정/삭제 비활성화
             updateButtonStates(true, false, false);
@@ -994,9 +973,9 @@
         function showCustomConfirm(message, onConfirm) {
             document.getElementById("customConfirmMessage").textContent = message;
             document.getElementById("customConfirm").style.display = "flex";
-            
+
             // 확인 버튼 클릭 이벤트 핸들러 설정
-            document.getElementById("confirm-ok-btn").onclick = function() {
+            document.getElementById("confirm-ok-btn").onclick = function () {
                 closeCustomConfirm(true);
                 if (typeof onConfirm === 'function') {
                     onConfirm();
@@ -1009,7 +988,7 @@
             return confirmed;
         }
 
-      function validatePlanInputs() {
+        function validatePlanInputs() {
             const requiredFields = [
                 { id: "planDate", name: "날짜" },
                 { id: "startTime", name: "시작시간" },
@@ -1036,7 +1015,7 @@
             // 참고사진URL 검사 - 값이 있으면 https://로 시작하는지 확인
             const imageUrl = document.getElementById("imageUrl").value.trim();
             console.log("참고사진URL 검사:", imageUrl);
-            
+
             if (imageUrl !== "") {
                 if (!imageUrl.startsWith("https://")) {
                     showCustomAlert("참고사진URL은 https://로 시작해야 합니다.");
@@ -1092,7 +1071,7 @@
             // 오늘 날짜를 YYYY-MM-DD 형식으로 설정
             const today = new Date().toISOString().split("T")[0];
             document.getElementById("datePicker").value = today;
-            
+
             // 초기 버튼 상태 설정 - 저장 버튼만 활성화
             updateButtonStates(true, false, false);
 
@@ -1133,6 +1112,19 @@
                 if (event.target === staffModal) {
                     staffModal.style.display = "none";
                 }
+                
+                const picModalBackdrop = document.getElementById("picModalBackdrop");
+                if (event.target === picModalBackdrop) {
+                    // 사진 URL 모달이 열려있으면 그것만 닫기
+                    const picModal = document.getElementById("picModal");
+                    if (picModal.style.display === "block") {
+                        picModal.style.display = "none";
+                    } 
+                    // 그렇지 않으면 관리자 모달 닫기
+                    else {
+                        closePicManagerModal();
+                    }
+                }
             });
 
             // 직원명 입력 필드 클릭 이벤트 리스너
@@ -1153,7 +1145,7 @@
 
             // 직원명 초기화 버튼 이벤트 리스너
             document.getElementById("resetManagerBtn").addEventListener("click", function () {
-                showCustomConfirm("선택된 모든 직원명를 초기화하시겠습니까?", function() {
+                showCustomConfirm("선택된 모든 직원명를 초기화하시겠습니까?", function () {
                     document.getElementById("employeeId").value = "";
                     document.getElementById("manager").value = "";
                     document.getElementById("staffSelectModal").style.display = "none";
@@ -1165,9 +1157,9 @@
                 console.log("저장 버튼 클릭");
                 const isValid = validatePlanInputs();
                 console.log("유효성 검사 결과:", isValid);
-                
+
                 if (isValid) {
-                    showCustomConfirm("계획을 저장하시겠습니까?", function() {
+                    showCustomConfirm("계획을 저장하시겠습니까?", function () {
                         appendPlan_id();
                     });
                 }
@@ -1178,9 +1170,9 @@
                 console.log("수정 버튼 클릭");
                 const isValid = validatePlanInputs();
                 console.log("유효성 검사 결과:", isValid);
-                
+
                 if (isValid) {
-                    showCustomConfirm("선택한 계획을 수정하시겠습니까?", function() {
+                    showCustomConfirm("선택한 계획을 수정하시겠습니까?", function () {
                         modifyPlan_id();
                     });
                 }
@@ -1195,7 +1187,7 @@
                     return;
                 }
 
-                showCustomConfirm("선택한 계획을 삭제하시겠습니까?", function() {
+                showCustomConfirm("선택한 계획을 삭제하시겠습니까?", function () {
                     deletePlanrow_id();
                 });
             });
@@ -1204,6 +1196,61 @@
             document.getElementById("btn-plan-search").addEventListener("click", function () {
                 getPlanAll_id();
             });
+            
+            // 참고사진 URL 입력 필드 클릭 이벤트
+            document.getElementById("imageUrl").addEventListener("click", function() {
+                openPicManagerModal();
+            });
+            
+            // 활동 사진 URL 관리 모달 관련 이벤트 리스너 설정
+            if (document.getElementById("picManagerCloseButton")) {
+                document.getElementById("picManagerCloseButton").addEventListener("click", closePicManagerModal);
+            }
+            
+            // 사진 추가 버튼 이벤트
+            if (document.getElementById("picAddButton")) {
+                document.getElementById("picAddButton").addEventListener("click", openNewModal);
+            }
+            
+            // 입력 취소 버튼 이벤트
+            if (document.getElementById("picCancelInputButton")) {
+                document.getElementById("picCancelInputButton").addEventListener("click", function() {
+                    // 참고사진URL 입력필드를 빈칸으로 설정
+                    document.getElementById("imageUrl").value = "";
+                    // 모달창 닫기
+                    closePicManagerModal();
+                });
+            }
+            
+            // 사진 URL 모달 닫기 버튼 이벤트
+            if (document.getElementById("picCloseButton")) {
+                document.getElementById("picCloseButton").addEventListener("click", closeModal);
+            }
+            
+            // 사진 URL 모달 취소 버튼 이벤트
+            if (document.getElementById("picCancelButton")) {
+                document.getElementById("picCancelButton").addEventListener("click", closeModal);
+            }
+            
+            // 사진 URL 모달 확인 버튼 이벤트
+            if (document.getElementById("picConfirmButton")) {
+                document.getElementById("picConfirmButton").addEventListener("click", handleConfirm);
+            }
+            
+            // 이미지 미리보기 버튼 이벤트
+            if (document.getElementById("picPreviewButton")) {
+                document.getElementById("picPreviewButton").addEventListener("click", previewImage);
+            }
+            
+            // 필터 입력 이벤트
+            if (document.getElementById("picFilterInput")) {
+                document.getElementById("picFilterInput").addEventListener("input", handleFilterInput);
+            }
+            
+            // 필터 클리어 버튼 이벤트
+            if (document.getElementById("picFilterClearButton")) {
+                document.getElementById("picFilterClearButton").addEventListener("click", clearFilter);
+            }
         });
 
         function populateStaffTable(staffData) {
@@ -1212,61 +1259,75 @@
 
             // 선택된 날짜 가져오기 (YYYYMMDD 형식)
             const selectedDate = changeDate(document.getElementById("datePicker").value);
-            
+
+            // 계약기간 내에 있는 직원들을 필터링하고 저장할 배열
+            let filteredStaff = [];
+
             // 헤더 행은 제외하고 데이터 행부터 처리
             for (let i = 1; i < staffData.length; i++) {
                 // 계약시작일(인덱스 2)과 계약종료일(인덱스 3) 가져오기
-                // 직원 데이터는 이미 문자열 형식으로 변환되어 있음
                 const startDate = staffData[i][2] || "";
                 const endDate = staffData[i][3] || "";
 
                 // 날짜 비교: 선택된 날짜가 계약기간 내에 있는지 확인
-                // 계약종료일이 비어있으면 현재 재직 중으로 간주
-                if (startDate && selectedDate >= startDate && 
+                if (startDate && selectedDate >= startDate &&
                     (!endDate || selectedDate <= endDate)) {
-                    const row = document.createElement("tr");
-
-                    // 직원번호(인덱스 0)와 이름(인덱스 1) 컬럼
-                    const idCell = document.createElement("td");
-                    idCell.textContent = staffData[i][0] || ""; // 직원번호
-
-                    const nameCell = document.createElement("td");
-                    nameCell.textContent = staffData[i][1] || ""; // 직원명
-
-                    row.appendChild(idCell);
-                    row.appendChild(nameCell);
-
-                    // 행 더블클릭 이벤트
-                    row.addEventListener("dblclick", function () {
-                        const currentEmployeeId = document.getElementById("employeeId").value;
-                        const currentManager = document.getElementById("manager").value;
-                        const newEmployeeId = staffData[i][0] || "";
-                        const newManager = staffData[i][1] || "";
-
-                        // 이미 선택된 직원명인지 확인
-                        if (currentManager.split(",").map(m => m.trim()).includes(newManager)) {
-                            showCustomAlert("이미 선택된 직원명입니다.");
-                            return;
-                        }
-
-                        // 기존 값이 있으면 콤마로 구분하여 추가
-                        document.getElementById("employeeId").value = currentEmployeeId 
-                            ? currentEmployeeId + ", " + newEmployeeId 
-                            : newEmployeeId;
-                        
-                        document.getElementById("manager").value = currentManager 
-                            ? currentManager + ", " + newManager 
-                            : newManager;
-
-                        document.getElementById("staffSelectModal").style.display = "none";
-                    });
-
-                    tableBody.appendChild(row);
+                    // 필터링된 직원 데이터 저장
+                    filteredStaff.push(staffData[i]);
                 }
             }
 
+            // 이름(인덱스 1)을 기준으로 오름차순 정렬
+            filteredStaff.sort((a, b) => {
+                const nameA = a[1] || "";
+                const nameB = b[1] || "";
+                return nameA.localeCompare(nameB); // 한글 이름 정렬 지원
+            });
+
+            // 정렬된 직원 데이터를 테이블에 추가
+            for (let i = 0; i < filteredStaff.length; i++) {
+                const row = document.createElement("tr");
+
+                // 직원번호(인덱스 0)와 이름(인덱스 1) 컬럼
+                const idCell = document.createElement("td");
+                idCell.textContent = filteredStaff[i][0] || ""; // 직원번호
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = filteredStaff[i][1] || ""; // 직원명
+
+                row.appendChild(idCell);
+                row.appendChild(nameCell);
+
+                // 행 더블클릭 이벤트
+                row.addEventListener("dblclick", function () {
+                    const currentEmployeeId = document.getElementById("employeeId").value;
+                    const currentManager = document.getElementById("manager").value;
+                    const newEmployeeId = filteredStaff[i][0] || "";
+                    const newManager = filteredStaff[i][1] || "";
+
+                    // 이미 선택된 직원명인지 확인
+                    if (currentManager.split(",").map(m => m.trim()).includes(newManager)) {
+                        showCustomAlert("이미 선택된 직원명입니다.");
+                        return;
+                    }
+
+                    // 기존 값이 있으면 콤마로 구분하여 추가
+                    document.getElementById("employeeId").value = currentEmployeeId
+                        ? currentEmployeeId + ", " + newEmployeeId
+                        : newEmployeeId;
+
+                    document.getElementById("manager").value = currentManager
+                        ? currentManager + ", " + newManager
+                        : newManager;
+
+                    document.getElementById("staffSelectModal").style.display = "none";
+                });
+
+                tableBody.appendChild(row);
+            }
+
             // 표시할 직원이 없는 경우 메시지 표시
-            if (tableBody.children.length === 0) {
+            if (filteredStaff.length === 0) {
                 const row = document.createElement("tr");
                 const cell = document.createElement("td");
                 cell.colSpan = 2;
@@ -1293,7 +1354,381 @@
                 }
             });
         }
+        
+        // 활동 사진 URL 관리 모달 관련 함수들
+        let currentRowId = null;
+        let isEditing = false;
+        let isViewOnly = false;
+        let allActivityData = []; // 모든 활동 데이터를 저장하는 배열
+        
+        // 관리자 모달 열기
+        function openPicManagerModal() {
+            const picManagerSystem = document.getElementById('picManagerSystem');
+            const picModalBackdrop = document.getElementById('picModalBackdrop');
+            const picManagerModal = document.getElementById('picManagerModal');
+            
+            picManagerSystem.style.display = 'block';
+            picModalBackdrop.style.display = 'block';
+            picManagerModal.style.display = 'block';
+
+            // 필터 초기화
+            clearFilter();
+
+            // 데이터 로드
+            refreshTable();
+        }
+
+        // 관리자 모달 닫기
+        function closePicManagerModal() {
+            const picManagerSystem = document.getElementById('picManagerSystem');
+            const picModalBackdrop = document.getElementById('picModalBackdrop');
+            const picManagerModal = document.getElementById('picManagerModal');
+            
+            picManagerSystem.style.display = 'none';
+            picModalBackdrop.style.display = 'none';
+            picManagerModal.style.display = 'none';
+
+            // 사진 URL 모달도 닫기
+            closeModal();
+        }
+        
+        // 테이블 새로고침
+        function refreshTable() {
+            fetchActivityPics()
+                .then(data => {
+                    // 모든 데이터 저장
+                    allActivityData = data || [];
+
+                    // 현재 필터 적용
+                    const filterValue = document.getElementById('picFilterInput').value.trim().toLowerCase();
+                    if (filterValue) {
+                        filterTable(filterValue);
+                    } else {
+                        renderFilteredTable(allActivityData, '');
+                    }
+                })
+                .catch(error => {
+                    console.error('테이블 로드 오류:', error);
+                    showCustomAlert('데이터를 불러오는 중 오류가 발생했습니다.');
+                });
+        }
+
+        // URL 텍스트 자르기
+        function truncateUrl(url) {
+            return url.length > 30 ? url.substring(0, 30) + '...' : url;
+        }
+        
+        // 모달 열기 (새 항목 추가)
+        function openNewModal() {
+            resetModal();
+            isEditing = false;
+            isViewOnly = false;
+            currentRowId = null;
+
+            // 입력 필드 편집 가능하게 설정
+            document.getElementById('picActivityName').readOnly = false;
+            document.getElementById('picUrl').readOnly = false;
+            document.getElementById('picPreviewButton').disabled = false;
+
+            document.getElementById('picModal').style.display = 'block';
+            document.getElementById('picActivityName').focus();
+        }
+
+        // 모달 열기 (조회 전용 - 더블클릭 시)
+        function openViewModal(id, activityName, url) {
+            resetModal();
+            isEditing = false;
+            isViewOnly = true;
+            currentRowId = id;
+
+            document.getElementById('picActivityName').value = activityName;
+            document.getElementById('picUrl').value = url;
+
+            // 입력 필드 읽기 전용으로 설정
+            document.getElementById('picActivityName').readOnly = true;
+            document.getElementById('picUrl').readOnly = true;
+            document.getElementById('picPreviewButton').disabled = true;
+
+            if (url) {
+                document.getElementById('picPreviewImage').src = url;
+            }
+
+            // 항상 보이도록 설정
+            document.getElementById('picPreviewContainer').style.display = 'block';
+
+            document.getElementById('picModal').style.display = 'block';
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('picModal').style.display = 'none';
+            resetModal();
+        }
+
+        // 모달 초기화
+        function resetModal() {
+            document.getElementById('picActivityName').value = '';
+            document.getElementById('picUrl').value = '';
+            document.getElementById('picPreviewImage').src = '';
+
+            // 입력 필드 상태 초기화
+            document.getElementById('picActivityName').readOnly = false;
+            document.getElementById('picUrl').readOnly = false;
+            document.getElementById('picPreviewButton').disabled = false;
+
+            isViewOnly = false;
+        }
+
+        // 이미지 미리보기
+        function previewImage() {
+            const url = document.getElementById('picUrl').value.trim();
+            const picPreviewImage = document.getElementById('picPreviewImage');
+
+            if (!url) {
+                picPreviewImage.src = '';
+                return;
+            }
+
+            picPreviewImage.src = url;
+
+            // 이미지 로드 오류 처리
+            picPreviewImage.onerror = function () {
+                console.error('이미지를 불러올 수 없습니다:', url);
+                picPreviewImage.src = '';
+            };
+        }
+        
+        // 필터 처리 함수
+        function handleFilterInput() {
+            const picFilterInput = document.getElementById('picFilterInput');
+            const picFilterClearButton = document.getElementById('picFilterClearButton');
+            const filterValue = picFilterInput.value.trim().toLowerCase();
+
+            // 클리어 버튼 표시/숨김 설정
+            picFilterClearButton.style.display = filterValue ? 'block' : 'none';
+
+            // 필터링 적용
+            filterTable(filterValue);
+        }
+
+        // 필터 초기화
+        function clearFilter() {
+            const picFilterInput = document.getElementById('picFilterInput');
+            const picFilterClearButton = document.getElementById('picFilterClearButton');
+            
+            picFilterInput.value = '';
+            picFilterClearButton.style.display = 'none';
+            filterTable('');
+        }
+
+        // 테이블 필터링
+        function filterTable(filterValue) {
+            if (!allActivityData.length) return;
+
+            // 모든 데이터를 필터링
+            const filteredData = filterValue
+                ? allActivityData.filter(item =>
+                    item.활동명.toLowerCase().includes(filterValue))
+                : allActivityData;
+
+            // 필터링된 데이터로 테이블 렌더링
+            renderFilteredTable(filteredData, filterValue);
+        }
+
+        // 필터링된 테이블 렌더링
+        function renderFilteredTable(data, filterValue) {
+            const picTableBody = document.getElementById('picTableBody');
+            picTableBody.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                const emptyRow = document.createElement('tr');
+
+                if (filterValue) {
+                    // 검색 결과가 없는 경우
+                    emptyRow.innerHTML = `<td colspan="3" class="pic-no-results">검색 결과가 없습니다: "${filterValue}"</td>`;
+                } else {
+                    // 데이터가 없는 경우
+                    emptyRow.innerHTML = '<td colspan="3" style="text-align: center;">데이터가 없습니다.</td>';
+                }
+
+                picTableBody.appendChild(emptyRow);
+                return;
+            }
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.classList.add('pic-clickable');
+                row.setAttribute('data-id', item.pic_id);
+                row.setAttribute('data-activity-name', item.활동명);
+                row.setAttribute('data-pic-url', item.url주소);
+
+                // 검색어 하이라이트 처리
+                let displayName = item.활동명;
+                if (filterValue) {
+                    const regex = new RegExp(`(${filterValue})`, 'gi');
+                    displayName = displayName.replace(regex, '<span class="pic-highlight">$1</span>');
+                }
+
+                row.innerHTML = `
+                    <td>${displayName}</td>
+                    <td class="url-cell">${truncateUrl(item.url주소)}</td>
+                    <td>
+                        <button class="button danger pic-delete-button" data-id="${item.pic_id}">삭제</button>
+                    </td>
+                `;
+
+                picTableBody.appendChild(row);
+
+                // 더블클릭 이벤트 추가 - URL 선택 및 모달 닫기
+                row.addEventListener('dblclick', function () {
+                    const id = this.getAttribute('data-id');
+                    const activityName = this.getAttribute('data-activity-name');
+                    const url = this.getAttribute('data-pic-url');
+                    
+                    // URL 모달을 열고 정보 표시
+                    openViewModal(id, activityName, url);
+                });
+            });
+
+            // 삭제 버튼 이벤트 추가
+            document.querySelectorAll('.pic-delete-button').forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.stopPropagation(); // 이벤트 버블링 방지
+                    const id = this.getAttribute('data-id');
+
+                    showCustomConfirm('정말로 이 항목을 삭제하시겠습니까?', function() {
+                        deleteActivityPic(id)
+                            .then(() => {
+                                refreshTable();
+                            });
+                    });
+                });
+            });
+        }
+        
+        // 확인 버튼 클릭 시 실행되는 함수
+        function handleConfirm() {
+            // 조회 전용 모드일 경우 URL 값을 전달하고 모달 닫기
+            if (isViewOnly) {
+                const url = document.getElementById('picUrl').value.trim();
+                document.getElementById('imageUrl').value = url;
+                closeModal();
+                closePicManagerModal();
+                return;
+            }
+
+            const activityName = document.getElementById('picActivityName').value.trim();
+            const url = document.getElementById('picUrl').value.trim();
+
+            if (!activityName) {
+                showCustomAlert('활동명을 입력해주세요.');
+                return;
+            }
+
+            if (!url) {
+                showCustomAlert('URL을 입력해주세요.');
+                return;
+            }
+
+            if (isEditing) {
+                // 기존 항목 업데이트
+                updateActivityPic(currentRowId, activityName, url)
+                    .then(() => {
+                        closeModal();
+                        refreshTable();
+                    })
+                    .catch(error => {
+                        console.error('저장 오류:', error);
+                        showCustomAlert('데이터 저장 중 오류가 발생했습니다.');
+                    });
+            } else {
+                // 새 항목인 경우 확인 메시지 표시
+                showCustomConfirm('입력한 정보를 저장하시겠습니까?', function() {
+                    addActivityPic(activityName, url)
+                        .then(() => {
+                            closeModal();
+                            refreshTable();
+                        })
+                        .catch(error => {
+                            console.error('저장 오류:', error);
+                            showCustomAlert('데이터 저장 중 오류가 발생했습니다.');
+                        });
+                });
+            }
+        }
     </script>
-  </body>
+
+    <!-- 활동 사진 URL 관리 모달 시스템 -->
+    <div id="picManagerSystem" style="display: none;">
+        <!-- 모달 배경 -->
+        <div id="picModalBackdrop" class="pic-modal-backdrop"></div>
+
+        <!-- 관리자 모달 -->
+        <div id="picManagerModal" class="pic-modal pic-manager-modal">
+            <div class="pic-modal-header">
+                <h2 style="font-size: 16px; margin: 0;">활동 사진 URL 관리</h2>
+                <span id="picManagerCloseButton" class="pic-close-button">&times;</span>
+            </div>
+            <div class="pic-modal-body">
+                <div class="pic-toolbar">
+                    <button id="picAddButton" class="button primary">사진 추가</button>
+                    <button id="picCancelInputButton" class="button primary">입력 취소</button>
+                    <div class="pic-filter-container">
+                        <input type="text" id="picFilterInput" placeholder="활동명 검색..." class="pic-filter-input">
+                        <span id="picFilterClearButton" class="pic-close-button pic-filter-clear">&times;</span>
+                    </div>
+                </div>
+
+                <div class="pic-table-container">
+                    <table id="picTable">
+                        <thead>
+                            <tr>
+                                <th>활동명</th>
+                                <th>URL 주소</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="picTableBody">
+                            <!-- 데이터가 여기에 동적으로 추가됩니다 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 사진 URL 모달 -->
+        <div id="picModal" class="pic-modal">
+            <div class="pic-modal-header">
+                <h2 style="font-size: 16px; margin: 0;">활동 사진 URL</h2>
+                <span id="picCloseButton" class="pic-close-button">&times;</span>
+            </div>
+            <div class="pic-modal-body">
+                <div class="pic-modal-content">
+                    <div class="pic-left-column">
+                        <div class="pic-input-group">
+                            <label for="picActivityName">활동명</label>
+                            <input type="text" id="picActivityName" placeholder="활동명을 입력하세요">
+                        </div>
+                        <div class="pic-input-group">
+                            <label for="picUrl">URL 주소</label>
+                            <input type="text" id="picUrl" placeholder="이미지 URL을 입력하세요">
+                            <button id="picPreviewButton" class="button secondary">이미지 보기</button>
+                        </div>
+                    </div>
+                    <div class="pic-right-column">
+                        <div id="picPreviewContainer" class="pic-preview-container">
+                            <img id="picPreviewImage" class="pic-preview-image" src="" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pic-modal-footer" style="display: flex; justify-content: flex-end;">
+                <button id="picCancelButton" class="button secondary" style="margin-right: 10px;">취소</button>
+                <button id="picConfirmButton" class="button primary">확인</button>
+            </div>
+        </div>
+    </div>
+
+</body>
 
 </html>

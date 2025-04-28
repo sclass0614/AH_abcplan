@@ -797,3 +797,376 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin-top: 15px;
     font-size: 18px;
 }
+/* 모달 스타일 - pic prefix 사용 */
+.pic-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1000;
+}
+
+.pic-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    width: 50%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    display: none;
+}
+
+.pic-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    border-bottom: 1px solid #cccccc;
+    background-color: #e9f2ef;
+    border-radius: 8px 8px 0 0;
+}
+
+.pic-modal-header h2 {
+    color: #235135;
+    font-weight: 500;
+}
+
+.pic-close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #235135;
+    display: inline-block;
+    line-height: 1;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    transition: transform 0.2s, color 0.2s;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    user-select: none;
+}
+
+.pic-close-button:hover {
+    color: #e74c3c;
+    transform: scale(1.1);
+}
+
+.pic-modal-body {
+    padding: 20px;
+}
+
+.pic-modal-content {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+
+.pic-left-column {
+    flex: 1;
+    padding: 0 10px;
+    min-width: 200px;
+}
+
+.pic-right-column {
+    flex: 1;
+    padding: 0 10px;
+    min-width: 150px;
+}
+
+.pic-input-group {
+    margin-bottom: 15px;
+}
+
+.pic-input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #235135;
+}
+
+.pic-input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.pic-input-group input:focus {
+    border-color: #5a8f7b;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(90, 143, 123, 0.2);
+}
+
+.pic-preview-container {
+    width: 100%;
+    height: 0;
+    padding-bottom: 133.33%;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    background-color: #e9f2ef;
+}
+
+.pic-preview-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    font-size: 0;
+    color: transparent;
+}
+
+.pic-modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #cccccc;
+    text-align: right;
+    background-color: #e9f2ef;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pic-modal-footer button {
+    margin-left: 10px;
+    display: inline-block;
+}
+
+.pic-table-container {
+    margin-top: 15px;
+    overflow-x: auto;
+    max-height: 240px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+}
+
+#picTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Noto Sans KR', sans-serif;
+    border-spacing: 0;
+    color: #333;
+}
+
+#picTable th {
+    background-color: #f5f9f7;
+    color: #235135;
+    font-weight: 600;
+    padding: 8px 15px;
+    text-align: left;
+    border-bottom: 2px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+#picTable td {
+    padding: 6px 15px;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+#picTable tr:hover {
+    background-color: #f5f9f7;
+    transition: background-color 0.2s;
+}
+
+#picTable tr:last-child td {
+    border-bottom: none;
+}
+
+/* 홀수/짝수 행 구분을 위한 스타일 */
+#picTable tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.pic-delete-button {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    border-radius: 4px !important;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pic-delete-button:hover {
+    background-color: #e74c3c;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.url-cell {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #1a73e8;
+    font-family: monospace;
+    background-color: #f5f5f5;
+    padding: 4px 8px !important;
+    border-radius: 3px;
+    font-size: 13px !important;
+}
+
+tr.pic-clickable {
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+tr.pic-clickable:active {
+    transform: scale(0.99);
+}
+
+#picTable th:nth-child(1),
+#picTable td:nth-child(1) {
+    width: 40%;
+}
+
+#picTable th:nth-child(2),
+#picTable td:nth-child(2) {
+    width: 40%;
+}
+
+#picTable th:nth-child(3),
+#picTable td:nth-child(3) {
+    width: 20%;
+    text-align: center;
+}
+
+/* 검색 강조 표시 스타일 개선 */
+.pic-highlight {
+    background-color: #ffeb3b;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* 결과 없음 메시지 스타일 개선 */
+.pic-no-results {
+    text-align: center;
+    padding: 25px;
+    color: #757575;
+    font-style: italic;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.pic-manager-modal {
+    max-width: 500px;
+    width: 60%;
+}
+
+.pic-manager-modal .pic-modal-body {
+    padding: 15px 20px;
+}
+
+.pic-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 15px 0;
+    padding: 0 0 12px 0;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.pic-toolbar button {
+    margin-right: 10px;
+}
+
+.pic-filter-container {
+    position: relative;
+    min-width: 150px;
+    flex-grow: 1;
+    max-width: 250px;
+    height: 36px;
+    margin: 0;
+    padding: 0;
+}
+
+.pic-filter-input {
+    width: 100%;
+    height: 36px;
+    padding: 0 30px 0 10px;
+    margin: 0;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    box-sizing: border-box;
+    line-height: 36px;
+}
+
+.pic-filter-clear {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    height: 20px;
+    width: 20px;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    display: none;
+    line-height: 1;
+}
+
+.pic-filter-clear:hover {
+    color: #e74c3c;
+}
+
+.button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1;
+}
+
+.button.primary {
+    background-color: #235135;
+    color: white;
+}
+
+.button.secondary {
+    background-color: #ededed;
+    color: #333333;
+    border: 1px solid #cccccc;
+}
+
+.button.danger {
+    background-color: #ff9800;
+    color: white;
+}
