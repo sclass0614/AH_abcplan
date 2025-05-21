@@ -477,7 +477,7 @@
             </div>
         </div>
 
-        
+
     </main>
 
     <!-- ==========================================================================
@@ -1058,8 +1058,75 @@
                 return false;
             }
 
+            // 시간 중복 검사 함수 호출
+            const currentPlanId = document.getElementById("planId").value;
+            if (!checkRightTime(planDate, startTime, endTime, currentPlanId)) {
+                return false;
+            }
+
             console.log("모든 유효성 검사 통과");
             return true;
+        }
+
+        // 시간 중복 검사 함수
+        function checkRightTime(planDate, startTime, endTime, currentPlanId) {
+            // 입력한 시작시간, 종료시간을 분 단위로 변환
+            const inputStartMinutes = convertTimeToMinutes(startTime);
+            const inputEndMinutes = convertTimeToMinutes(endTime);
+
+            // 현재 선택된 날짜에 해당하는 계획들만 필터링
+            const sameDatePlans = dailyPlanAll.filter(plan => plan[1] === planDate);
+
+            // 중복 검사
+            for (const plan of sameDatePlans) {
+                // 수정 시 자기 자신의 계획은 건너뜀
+                if (currentPlanId && plan[0] === currentPlanId) {
+                    continue;
+                }
+
+                // 계획의 시작시간과 종료시간을 분 단위로 변환
+                const planStartTime = plan[2].replace(/'/g, "").padStart(4, '0');
+                const planEndTime = plan[3].replace(/'/g, "").padStart(4, '0');
+                const planStartMinutes = convertTimeToMinutes(planStartTime);
+                const planEndMinutes = convertTimeToMinutes(planEndTime);
+
+                // 중복 체크 로직:
+                // 1. 입력 시간이 기존 계획 시간 범위 내에 있는 경우
+                // 2. 기존 계획 시간이 입력 시간 범위 내에 있는 경우
+                // 3. 입력 시간이 기존 계획 시간을 완전히 포함하는 경우
+                // 4. 완전히 동일한 시간은 허용
+                if (planStartMinutes === inputStartMinutes && planEndMinutes === inputEndMinutes) {
+                    // 완전히 동일한 시간은 허용
+                    continue;
+                }
+
+                if ((inputStartMinutes >= planStartMinutes && inputStartMinutes < planEndMinutes) ||
+                    (inputEndMinutes > planStartMinutes && inputEndMinutes <= planEndMinutes) ||
+                    (inputStartMinutes <= planStartMinutes && inputEndMinutes >= planEndMinutes)) {
+
+                    // HH:MM 형식으로 변환하여, 직원명과 시간을 표시
+                    const planStartTimeFormatted = formatTime(planStartTime);
+                    const planEndTimeFormatted = formatTime(planEndTime);
+                    const staffName = plan[5]; // 직원명은 인덱스 5
+
+                    showCustomAlert(`입력한 시간이 ${staffName}님의 기존 계획 (${planStartTimeFormatted}~${planEndTimeFormatted})과 중복됩니다.`);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // 시간(HHMM)을 분으로 변환하는 함수
+        function convertTimeToMinutes(timeStr) {
+            const hours = parseInt(timeStr.substring(0, 2));
+            const minutes = parseInt(timeStr.substring(2, 4));
+            return hours * 60 + minutes;
+        }
+
+        // 시간(HHMM)을 HH:MM 형식으로 변환하는 함수
+        function formatTime(timeStr) {
+            return `${timeStr.substring(0, 2)}:${timeStr.substring(2, 4)}`;
         }
 
         // 페이지 로드 시 초기화 및 데이터 로드
@@ -1110,14 +1177,14 @@
                 if (event.target === staffModal) {
                     staffModal.style.display = "none";
                 }
-                
+
                 const picModalBackdrop = document.getElementById("picModalBackdrop");
                 if (event.target === picModalBackdrop) {
                     // 사진 URL 모달이 열려있으면 그것만 닫기
                     const picModal = document.getElementById("picModal");
                     if (picModal.style.display === "block") {
                         picModal.style.display = "none";
-                    } 
+                    }
                     // 그렇지 않으면 관리자 모달 닫기
                     else {
                         closePicManagerModal();
@@ -1194,57 +1261,57 @@
             document.getElementById("btn-plan-search").addEventListener("click", function () {
                 getPlanAll_id();
             });
-            
+
             // 참고사진 URL 입력 필드 클릭 이벤트
-            document.getElementById("imageUrl").addEventListener("click", function() {
+            document.getElementById("imageUrl").addEventListener("click", function () {
                 openPicManagerModal();
             });
-            
+
             // 활동 사진 URL 관리 모달 관련 이벤트 리스너 설정
             if (document.getElementById("picManagerCloseButton")) {
                 document.getElementById("picManagerCloseButton").addEventListener("click", closePicManagerModal);
             }
-            
+
             // 사진 추가 버튼 이벤트
             if (document.getElementById("picAddButton")) {
                 document.getElementById("picAddButton").addEventListener("click", openNewModal);
             }
-            
+
             // 입력 취소 버튼 이벤트
             if (document.getElementById("picCancelInputButton")) {
-                document.getElementById("picCancelInputButton").addEventListener("click", function() {
+                document.getElementById("picCancelInputButton").addEventListener("click", function () {
                     // 참고사진URL 입력필드를 빈칸으로 설정
                     document.getElementById("imageUrl").value = "";
                     // 모달창 닫기
                     closePicManagerModal();
                 });
             }
-            
+
             // 사진 URL 모달 닫기 버튼 이벤트
             if (document.getElementById("picCloseButton")) {
                 document.getElementById("picCloseButton").addEventListener("click", closeModal);
             }
-            
+
             // 사진 URL 모달 취소 버튼 이벤트
             if (document.getElementById("picCancelButton")) {
                 document.getElementById("picCancelButton").addEventListener("click", closeModal);
             }
-            
+
             // 사진 URL 모달 확인 버튼 이벤트
             if (document.getElementById("picConfirmButton")) {
                 document.getElementById("picConfirmButton").addEventListener("click", handleConfirm);
             }
-            
+
             // 이미지 미리보기 버튼 이벤트
             if (document.getElementById("picPreviewButton")) {
                 document.getElementById("picPreviewButton").addEventListener("click", previewImage);
             }
-            
+
             // 필터 입력 이벤트
             if (document.getElementById("picFilterInput")) {
                 document.getElementById("picFilterInput").addEventListener("input", handleFilterInput);
             }
-            
+
             // 필터 클리어 버튼 이벤트
             if (document.getElementById("picFilterClearButton")) {
                 document.getElementById("picFilterClearButton").addEventListener("click", clearFilter);
@@ -1352,19 +1419,19 @@
                 }
             });
         }
-        
+
         // 활동 사진 URL 관리 모달 관련 함수들
         let currentRowId = null;
         let isEditing = false;
         let isViewOnly = false;
         let allActivityData = []; // 모든 활동 데이터를 저장하는 배열
-        
+
         // 관리자 모달 열기
         function openPicManagerModal() {
             const picManagerSystem = document.getElementById('picManagerSystem');
             const picModalBackdrop = document.getElementById('picModalBackdrop');
             const picManagerModal = document.getElementById('picManagerModal');
-            
+
             picManagerSystem.style.display = 'block';
             picModalBackdrop.style.display = 'block';
             picManagerModal.style.display = 'block';
@@ -1381,7 +1448,7 @@
             const picManagerSystem = document.getElementById('picManagerSystem');
             const picModalBackdrop = document.getElementById('picModalBackdrop');
             const picManagerModal = document.getElementById('picManagerModal');
-            
+
             picManagerSystem.style.display = 'none';
             picModalBackdrop.style.display = 'none';
             picManagerModal.style.display = 'none';
@@ -1389,14 +1456,14 @@
             // 사진 URL 모달도 닫기
             closeModal();
         }
-        
+
         // 테이블 새로고침
         function refreshTable() {
             fetchActivityPics()
                 .then(data => {
                     // 모든 데이터 저장
                     allActivityData = data || [];
-                    
+
                     // 활동명 기준으로 오름차순 정렬
                     allActivityData.sort((a, b) => {
                         return a.활동명.localeCompare(b.활동명, 'ko-KR');
@@ -1420,7 +1487,7 @@
         function truncateUrl(url) {
             return url.length > 30 ? url.substring(0, 30) + '...' : url;
         }
-        
+
         // 모달 열기 (새 항목 추가)
         function openNewModal() {
             resetModal();
@@ -1500,7 +1567,7 @@
                 picPreviewImage.src = '';
             };
         }
-        
+
         // 필터 처리 함수
         function handleFilterInput() {
             const picFilterInput = document.getElementById('picFilterInput');
@@ -1518,7 +1585,7 @@
         function clearFilter() {
             const picFilterInput = document.getElementById('picFilterInput');
             const picFilterClearButton = document.getElementById('picFilterClearButton');
-            
+
             picFilterInput.value = '';
             picFilterClearButton.style.display = 'none';
             filterTable('');
@@ -1587,7 +1654,7 @@
                     const id = this.getAttribute('data-id');
                     const activityName = this.getAttribute('data-activity-name');
                     const url = this.getAttribute('data-pic-url');
-                    
+
                     // URL 모달을 열고 정보 표시
                     openViewModal(id, activityName, url);
                 });
@@ -1599,7 +1666,7 @@
                     e.stopPropagation(); // 이벤트 버블링 방지
                     const id = this.getAttribute('data-id');
 
-                    showCustomConfirm('정말로 이 항목을 삭제하시겠습니까?', function() {
+                    showCustomConfirm('정말로 이 항목을 삭제하시겠습니까?', function () {
                         deleteActivityPic(id)
                             .then(() => {
                                 refreshTable();
@@ -1608,7 +1675,7 @@
                 });
             });
         }
-        
+
         // 확인 버튼 클릭 시 실행되는 함수
         function handleConfirm() {
             // 조회 전용 모드일 경우 URL 값을 전달하고 모달 닫기
@@ -1646,7 +1713,7 @@
                     });
             } else {
                 // 새 항목인 경우 확인 메시지 표시
-                showCustomConfirm('입력한 정보를 저장하시겠습니까?', function() {
+                showCustomConfirm('입력한 정보를 저장하시겠습니까?', function () {
                     addActivityPic(activityName, url)
                         .then(() => {
                             closeModal();
