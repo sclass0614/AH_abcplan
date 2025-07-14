@@ -22,15 +22,16 @@ function initSupabase() {
 window.supabase = initSupabase();
 
 /**
- * 모든 계획 데이터를 가져오는 함수
+ * 계획 데이터를 가져오는 함수
+ * @param {string} selectedDate - 선택된 날짜 (YYYYMMDD 형식, 선택사항)
  * @returns {Promise<Array>} 계획 데이터 배열
  */
-async function getPlanAll() {
+async function getPlanAll(selectedDate = null) {
     try {
         const supabase = initSupabase();
         
-        // 모든 필드 이름을 명시적으로 지정하여 쿼리
-        const { data, error } = await supabase
+        // 기본 쿼리 구성
+        let query = supabase
             .from(PLAN_TABLE)
             .select(`
                 계획_id,
@@ -46,8 +47,18 @@ async function getPlanAll() {
                 내용및특이사항,
                 활동기록,
                 참고사진url
-            `)
-            .order('날짜', { ascending: false });
+            `);
+
+        // 날짜가 선택되었다면 해당 날짜로 필터링
+        if (selectedDate) {
+            // 문자열 형식의 날짜를 숫자로 변환
+            const dateNum = parseInt(selectedDate.replace(/-/g, ''));
+            query = query.eq('날짜', dateNum);
+            console.log("선택된 날짜로 필터링:", dateNum);
+        }
+
+        // 쿼리 실행
+        const { data, error } = await query.order('날짜', { ascending: false });
 
         if (error) {
             console.error("Supabase 쿼리 오류:", error);

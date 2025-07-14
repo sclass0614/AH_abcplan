@@ -494,7 +494,7 @@
             document.getElementById("loadingOverlay").style.display = "none";
         }
 
-        let dailyPlanAll = []; // 모든 계획 데이터를 저장하는 배열
+        // let dailyPlanAll = []; // 더 이상 사용하지 않음 - 이제 getPlanAll() 함수로 직접 데이터를 가져옴
         let employeeall = [];
 
         // Supabase 함수 호출을 위한 유틸리티 함수들
@@ -522,18 +522,10 @@
             showLoading(); // 초기화 시작 시 로딩 표시
 
             try {
-                // 두 작업을 병렬로 실행하기 위해 Promise.all 사용
-                const results = await Promise.all([
-                    getPlanAllPromise(),
-                    getEmployeesPromise()
-                ]);
-
-                // 결과 할당
-                dailyPlanAll = results[0];
-                employeeall = results[1];
+                // 직원 정보 로드
+                employeeall = await getEmployeesPromise();
 
                 console.log("데이터 로드 완료");
-                console.log(dailyPlanAll);
                 console.log(employeeall);
                 console.log("데이터 로드 완료 확인");
 
@@ -551,8 +543,8 @@
         async function getPlanAll_id() {
             showLoading();
             try {
-                dailyPlanAll = await getPlanAllPromise();
-                makeTable_plan();
+                // 현재 선택된 날짜로 테이블 새로고침
+                await makeTable_plan();
                 console.log("계획 데이터 새로고침 완료");
             } catch (error) {
                 console.error("데이터 로드 실패:", error);
@@ -711,12 +703,11 @@
             }
         }
 
-        function makeTable_plan() {
+        async function makeTable_plan() {
             const selectedDate = changeDate(
                 document.getElementById("datePicker").value
             );
             console.log("선택된 날짜:", selectedDate);
-            console.log("전체 데이터:", dailyPlanAll);
 
             // 선택된 날짜가 없으면 return
             if (!selectedDate) {
@@ -724,59 +715,69 @@
                 return;
             }
 
-            // 날짜에 해당하는 계획 데이터 필터링
-            const filteredPlans = dailyPlanAll.filter((plan) => {
-                // plan[1]이 이미 숫자 문자열 형식이므로 직접 비교
-                console.log("계획 날짜:", plan[1], "선택 날짜:", selectedDate);
-                return plan[1] == selectedDate;
-            });
-            console.log("필터링된 계획 데이터:", filteredPlans.length + "개 항목");
+            // 로딩 표시
+            showLoading();
 
-            // 시작시간(인덱스 2)과 직원명(인덱스 5)를 기준으로 기본 정렬
-            filteredPlans.sort((a, b) => {
-                // 시작시간 비교 (작은따옴표 제거 후 비교)
-                const timeA = a[2].replace(/'/g, "");
-                const timeB = b[2].replace(/'/g, "");
-                if (timeA !== timeB) {
-                    return timeA.localeCompare(timeB);
+            try {
+                // 날짜 형식 변환 (YYYYMMDD -> YYYY-MM-DD)
+                const formattedDate = selectedDate.slice(0, 4) + '-' + selectedDate.slice(4, 6) + '-' + selectedDate.slice(6, 8);
+                console.log("변환된 날짜:", formattedDate);
+
+                // 선택된 날짜의 계획 데이터만 가져오기
+                const filteredPlans = await getPlanAll(formattedDate);
+                console.log("가져온 계획 데이터:", filteredPlans.length + "개 항목");
+
+                // 시작시간(인덱스 2)과 직원명(인덱스 5)를 기준으로 기본 정렬
+                filteredPlans.sort((a, b) => {
+                    // 시작시간 비교 (작은따옴표 제거 후 비교)
+                    const timeA = a[2].replace(/'/g, "");
+                    const timeB = b[2].replace(/'/g, "");
+                    if (timeA !== timeB) {
+                        return timeA.localeCompare(timeB);
+                    }
+                    // 시작시간이 같은 경우 직원명 이름으로 비교
+                    return a[5].localeCompare(b[5]);
+                });
+
+                // 테이블 내용 초기화
+                const tableBody = document.getElementById("table-body");
+                tableBody.innerHTML = "";
+
+                // 데이터가 없는 경우 처리
+                if (filteredPlans.length === 0) {
+                    const emptyRow = document.createElement("tr");
+                    const emptyCell = document.createElement("td");
+                    emptyCell.colSpan = 10;
+                    emptyCell.textContent = "해당 날짜의 계획 데이터가 없습니다.";
+                    emptyCell.style.textAlign = "center";
+                    emptyCell.style.padding = "20px";
+                    emptyRow.appendChild(emptyCell);
+                    tableBody.appendChild(emptyRow);
+
+                    // 입력 필드의 날짜 설정
+                    document.getElementById("planDate").value = selectedDate;
+
+                    // 데이터가 없을 때는 notice 초기화
+                    document.getElementById("noticeTextarea").value = "";
+                    return;
                 }
-                // 시작시간이 같은 경우 직원명 이름으로 비교
-                return a[5].localeCompare(b[5]);
-            });
 
-            // 테이블 내용 초기화
-            const tableBody = document.getElementById("table-body");
-            tableBody.innerHTML = "";
-
-            // 데이터가 없는 경우 처리
-            if (filteredPlans.length === 0) {
-                const emptyRow = document.createElement("tr");
-                const emptyCell = document.createElement("td");
-                emptyCell.colSpan = 10;
-                emptyCell.textContent = "해당 날짜의 계획 데이터가 없습니다.";
-                emptyCell.style.textAlign = "center";
-                emptyCell.style.padding = "20px";
-                emptyRow.appendChild(emptyCell);
-                tableBody.appendChild(emptyRow);
+                // 필터링된 데이터를 테이블에 추가
+                displaySortedData(filteredPlans);
 
                 // 입력 필드의 날짜 설정
                 document.getElementById("planDate").value = selectedDate;
 
-                // 데이터가 없을 때는 notice 초기화
-                document.getElementById("noticeTextarea").value = "";
-                return;
+                resetAllFields();
+
+                // 테이블 생성 후 누락된 활동기록 체크
+                entryCheck();
+            } catch (error) {
+                console.error("계획 데이터 로드 중 오류 발생:", error);
+                alert("계획 데이터를 불러오는 중 오류가 발생했습니다.");
+            } finally {
+                hideLoading();
             }
-
-            // 필터링된 데이터를 테이블에 추가
-            displaySortedData(filteredPlans);
-
-            // 입력 필드의 날짜 설정
-            document.getElementById("planDate").value = selectedDate;
-
-            resetAllFields();
-
-            // 테이블 생성 후 누락된 활동기록 체크
-            entryCheck();
         }
 
         let currentSortColumn = 1; // 기본 정렬 컬럼 (시작시간)
@@ -818,43 +819,61 @@
             });
         });
 
-        function sortTable(columnIndex) {
+        async function sortTable(columnIndex) {
             const selectedDate = changeDate(document.getElementById("datePicker").value);
-            let filteredPlans = dailyPlanAll.filter((plan) => {
-                return plan[1] == selectedDate;
-            });
-
-            // 같은 컬럼을 다시 클릭하면 정렬 방향 전환
-            if (columnIndex === currentSortColumn) {
-                isAscending = !isAscending;
-            } else {
-                currentSortColumn = columnIndex;
-                isAscending = true;
+            
+            // 선택된 날짜가 없으면 return
+            if (!selectedDate) {
+                console.log("날짜가 선택되지 않았습니다.");
+                return;
             }
 
-            // 컬럼 인덱스에 따른 실제 데이터 인덱스 매핑
-            const dataIndexMap = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11];
-            const dataIndex = dataIndexMap[columnIndex];
+            showLoading();
+            
+            try {
+                // 날짜 형식 변환 (YYYYMMDD -> YYYY-MM-DD)
+                const formattedDate = selectedDate.slice(0, 4) + '-' + selectedDate.slice(4, 6) + '-' + selectedDate.slice(6, 8);
+                
+                // 선택된 날짜의 계획 데이터만 가져오기
+                let filteredPlans = await getPlanAll(formattedDate);
 
-            // 정렬 로직
-            filteredPlans.sort((a, b) => {
-                let valueA = (a[dataIndex] || "").toString().replace(/'/g, "");
-                let valueB = (b[dataIndex] || "").toString().replace(/'/g, "");
-
-                // 시간 값에 대한 특별 처리
-                if (dataIndex === 2 || dataIndex === 3) {
-                    valueA = valueA.padStart(4, '0');
-                    valueB = valueB.padStart(4, '0');
-                }
-
-                if (isAscending) {
-                    return valueA.localeCompare(valueB);
+                // 같은 컬럼을 다시 클릭하면 정렬 방향 전환
+                if (columnIndex === currentSortColumn) {
+                    isAscending = !isAscending;
                 } else {
-                    return valueB.localeCompare(valueA);
+                    currentSortColumn = columnIndex;
+                    isAscending = true;
                 }
-            });
 
-            displaySortedData(filteredPlans);
+                // 컬럼 인덱스에 따른 실제 데이터 인덱스 매핑
+                const dataIndexMap = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11];
+                const dataIndex = dataIndexMap[columnIndex];
+
+                // 정렬 로직
+                filteredPlans.sort((a, b) => {
+                    let valueA = (a[dataIndex] || "").toString().replace(/'/g, "");
+                    let valueB = (b[dataIndex] || "").toString().replace(/'/g, "");
+
+                    // 시간 값에 대한 특별 처리
+                    if (dataIndex === 2 || dataIndex === 3) {
+                        valueA = valueA.padStart(4, '0');
+                        valueB = valueB.padStart(4, '0');
+                    }
+
+                    if (isAscending) {
+                        return valueA.localeCompare(valueB);
+                    } else {
+                        return valueB.localeCompare(valueA);
+                    }
+                });
+
+                displaySortedData(filteredPlans);
+            } catch (error) {
+                console.error("정렬 중 오류 발생:", error);
+                alert("데이터를 불러오는 중 오류가 발생했습니다.");
+            } finally {
+                hideLoading();
+            }
         }
 
         /**
@@ -986,7 +1005,7 @@
             return confirmed;
         }
 
-        function validatePlanInputs() {
+        async function validatePlanInputs() {
             const requiredFields = [
                 { id: "planDate", name: "날짜" },
                 { id: "startTime", name: "시작시간" },
@@ -1060,7 +1079,7 @@
 
             // 시간 중복 검사 함수 호출
             const currentPlanId = document.getElementById("planId").value;
-            if (!checkRightTime(planDate, startTime, endTime, currentPlanId)) {
+            if (!(await checkRightTime(planDate, startTime, endTime, currentPlanId))) {
                 return false;
             }
 
@@ -1069,13 +1088,22 @@
         }
 
         // 시간 중복 검사 함수
-        function checkRightTime(planDate, startTime, endTime, currentPlanId) {
+        async function checkRightTime(planDate, startTime, endTime, currentPlanId) {
             // 입력한 시작시간, 종료시간을 분 단위로 변환
             const inputStartMinutes = convertTimeToMinutes(startTime);
             const inputEndMinutes = convertTimeToMinutes(endTime);
 
-            // 현재 선택된 날짜에 해당하는 계획들만 필터링
-            const sameDatePlans = dailyPlanAll.filter(plan => plan[1] === planDate);
+            try {
+                // 날짜 형식 변환 (YYYYMMDD -> YYYY-MM-DD)
+                const formattedDate = planDate.slice(0, 4) + '-' + planDate.slice(4, 6) + '-' + planDate.slice(6, 8);
+                
+                // 현재 선택된 날짜에 해당하는 계획들만 가져오기
+                const sameDatePlans = await getPlanAll(formattedDate);
+            } catch (error) {
+                console.error("시간 중복 검사 중 오류 발생:", error);
+                // 오류 발생 시 중복 검사를 건너뛰고 true 반환
+                return true;
+            }
 
             // 중복 검사
             for (const plan of sameDatePlans) {
@@ -1218,9 +1246,9 @@
             });
 
             // 저장 버튼 이벤트 리스너
-            document.getElementById("btn-plan-save").addEventListener("click", function () {
+            document.getElementById("btn-plan-save").addEventListener("click", async function () {
                 console.log("저장 버튼 클릭");
-                const isValid = validatePlanInputs();
+                const isValid = await validatePlanInputs();
                 console.log("유효성 검사 결과:", isValid);
 
                 if (isValid) {
@@ -1231,9 +1259,9 @@
             });
 
             // 수정 버튼 이벤트 리스너
-            document.getElementById("btn-plan-modify").addEventListener("click", function () {
+            document.getElementById("btn-plan-modify").addEventListener("click", async function () {
                 console.log("수정 버튼 클릭");
-                const isValid = validatePlanInputs();
+                const isValid = await validatePlanInputs();
                 console.log("유효성 검사 결과:", isValid);
 
                 if (isValid) {
