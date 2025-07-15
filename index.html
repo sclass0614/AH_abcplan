@@ -1099,50 +1099,50 @@
                 
                 // 현재 선택된 날짜에 해당하는 계획들만 가져오기
                 const sameDatePlans = await getPlanAll(formattedDate);
+
+                // 중복 검사
+                for (const plan of sameDatePlans) {
+                    // 수정 시 자기 자신의 계획은 건너뜀
+                    if (currentPlanId && plan[0] === currentPlanId) {
+                        continue;
+                    }
+
+                    // 계획의 시작시간과 종료시간을 분 단위로 변환
+                    const planStartTime = plan[2].replace(/'/g, "").padStart(4, '0');
+                    const planEndTime = plan[3].replace(/'/g, "").padStart(4, '0');
+                    const planStartMinutes = convertTimeToMinutes(planStartTime);
+                    const planEndMinutes = convertTimeToMinutes(planEndTime);
+
+                    // 중복 체크 로직:
+                    // 1. 입력 시간이 기존 계획 시간 범위 내에 있는 경우
+                    // 2. 기존 계획 시간이 입력 시간 범위 내에 있는 경우
+                    // 3. 입력 시간이 기존 계획 시간을 완전히 포함하는 경우
+                    // 4. 완전히 동일한 시간은 허용
+                    if (planStartMinutes === inputStartMinutes && planEndMinutes === inputEndMinutes) {
+                        // 완전히 동일한 시간은 허용
+                        continue;
+                    }
+
+                    if ((inputStartMinutes >= planStartMinutes && inputStartMinutes < planEndMinutes) ||
+                        (inputEndMinutes > planStartMinutes && inputEndMinutes <= planEndMinutes) ||
+                        (inputStartMinutes <= planStartMinutes && inputEndMinutes >= planEndMinutes)) {
+
+                        // HH:MM 형식으로 변환하여, 직원명과 시간을 표시
+                        const planStartTimeFormatted = formatTime(planStartTime);
+                        const planEndTimeFormatted = formatTime(planEndTime);
+                        const staffName = plan[5]; // 직원명은 인덱스 5
+
+                        showCustomAlert(`입력한 시간이 ${staffName}님의 기존 계획 (${planStartTimeFormatted}~${planEndTimeFormatted})과 중복됩니다.`);
+                        return false;
+                    }
+                }
+
+                return true;
             } catch (error) {
                 console.error("시간 중복 검사 중 오류 발생:", error);
                 // 오류 발생 시 중복 검사를 건너뛰고 true 반환
                 return true;
             }
-
-            // 중복 검사
-            for (const plan of sameDatePlans) {
-                // 수정 시 자기 자신의 계획은 건너뜀
-                if (currentPlanId && plan[0] === currentPlanId) {
-                    continue;
-                }
-
-                // 계획의 시작시간과 종료시간을 분 단위로 변환
-                const planStartTime = plan[2].replace(/'/g, "").padStart(4, '0');
-                const planEndTime = plan[3].replace(/'/g, "").padStart(4, '0');
-                const planStartMinutes = convertTimeToMinutes(planStartTime);
-                const planEndMinutes = convertTimeToMinutes(planEndTime);
-
-                // 중복 체크 로직:
-                // 1. 입력 시간이 기존 계획 시간 범위 내에 있는 경우
-                // 2. 기존 계획 시간이 입력 시간 범위 내에 있는 경우
-                // 3. 입력 시간이 기존 계획 시간을 완전히 포함하는 경우
-                // 4. 완전히 동일한 시간은 허용
-                if (planStartMinutes === inputStartMinutes && planEndMinutes === inputEndMinutes) {
-                    // 완전히 동일한 시간은 허용
-                    continue;
-                }
-
-                if ((inputStartMinutes >= planStartMinutes && inputStartMinutes < planEndMinutes) ||
-                    (inputEndMinutes > planStartMinutes && inputEndMinutes <= planEndMinutes) ||
-                    (inputStartMinutes <= planStartMinutes && inputEndMinutes >= planEndMinutes)) {
-
-                    // HH:MM 형식으로 변환하여, 직원명과 시간을 표시
-                    const planStartTimeFormatted = formatTime(planStartTime);
-                    const planEndTimeFormatted = formatTime(planEndTime);
-                    const staffName = plan[5]; // 직원명은 인덱스 5
-
-                    showCustomAlert(`입력한 시간이 ${staffName}님의 기존 계획 (${planStartTimeFormatted}~${planEndTimeFormatted})과 중복됩니다.`);
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         // 시간(HHMM)을 분으로 변환하는 함수
