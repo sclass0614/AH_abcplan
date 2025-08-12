@@ -6,32 +6,25 @@
     <meta charset="UTF-8" />
     <title>우리집 DayCareCenter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Google Fonts 추가 - Noto Sans KR 폰트를 사용하여 한글 표시 최적화 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="style.css" />
-    <!-- Supabase 클라이언트 라이브러리 추가 -->
+    <link rel="stylesheet" href="./style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- 사용자 정의 Supabase 스크립트 -->
     <script src="supabase.js"></script>
-    <script type="module" src="https://sclass0614.github.io/authCheck/authCheck.js"></script>
+    <!-- <script type="module" src="https://sclass0614.github.io/authCheck/authCheck.js"></script> -->
 
 
 </head>
 
 <body>
-    <!-- 로딩 오버레이 추가 -->
     <div id="loadingOverlay">
         <div class="loader"></div>
         <div class="loading-text">데이터를 처리중입니다...</div>
     </div>
 
-    <!-- ==========================================================================
-       [4] Header & Navigation
-       ========================================================================== -->
     <header id="main-header">
         <h1 id="app-title">
             <i class="fas fa-home header-icon"></i>
@@ -39,7 +32,6 @@
         </h1>
     </header>
 
-    <!-- 소분류코드 선택 모달 -->
     <div id="subcategoryCodeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -278,7 +270,6 @@
     </div>
 
 
-    <!-- 직원명 선택 모달 -->
     <div id="staffSelectModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -295,7 +286,6 @@
                         </tr>
                     </thead>
                     <tbody id="staff-list-body">
-                        <!-- 직원명 데이터가 여기에 동적으로 로드됩니다 -->
                     </tbody>
                 </table>
             </div>
@@ -306,9 +296,6 @@
     </div>
 
     <main id="app-main">
-        <!-- ==========================================================================
-         [5] Page 1: Daily Plan
-         ========================================================================== -->
         <section class="page active" id="page1">
             <div id="plan-header" class="header-container">
                 <h2 id="plan-title">Daily Plan</h2>
@@ -326,7 +313,6 @@
                     <table class="list-table" id="daily-plan-table">
                         <thead>
                             <tr id="plan-table-header">
-                                <!-- <th>계획_ID</th> -->
                                 <th>날짜</th>
                                 <th>시작시간</th>
                                 <th>종료시간</th>
@@ -340,15 +326,12 @@
                             </tr>
                         </thead>
                         <tbody id="table-body">
-                            <!-- 동적 데이터 로드 -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- 입력 영역: Plan Entry / Result Entry / Notice -->
             <div id="form-panels" class="three-panel">
-                <!-- Plan Entry -->
                 <div id="plan-entry-panel" class="panel">
                     <h3 id="plan-entry-title">Plan Entry</h3>
                     <div id="id-date-row" class="row-2col">
@@ -408,13 +391,11 @@
                     <input type="text" id="imageUrl" placeholder="클릭!" readonly class="clickable-input" />
                 </div>
 
-                <!-- Result Entry -->
                 <div id="result-entry-panel" class="panel">
                     <h3 id="result-entry-title">Result Entry</h3>
                     <textarea id="resultEntryTextarea" rows="14" placeholder="결과 내용을 입력..."></textarea>
                 </div>
 
-                <!-- Notice -->
                 <div id="notice-panel" class="panel relative-panel">
                     <h3 id="notice-title">Notice</h3>
                     <textarea id="noticeTextarea" rows="14" placeholder="누락된 사항이 없습니다." class="notice-textarea"
@@ -432,7 +413,6 @@
                 </div>
             </div>
         </section>
-        <!-- 커스텀 확인 대화상자 컨테이너 -->
         <div id="customConfirm" class="custom-alert">
             <div id="confirm-content" class="custom-alert-content">
                 <div id="confirm-header" class="custom-alert-header confirm-header">
@@ -456,7 +436,6 @@
                 </div>
             </div>
         </div>
-        <!-- 커스텀 알림 컨테이너 -->
         <div id="customAlert" class="custom-alert">
             <div id="alert-content" class="custom-alert-content">
                 <div id="alert-header" class="custom-alert-header">
@@ -480,12 +459,7 @@
 
     </main>
 
-    <!-- ==========================================================================
-       [7] JavaScript: 함수 모듈화 및 이벤트 처리
-       ========================================================================== -->
-
     <script>
-        // 로딩 표시 함수들 추가
         function showLoading() {
             document.getElementById("loadingOverlay").style.display = "flex";
         }
@@ -494,10 +468,8 @@
             document.getElementById("loadingOverlay").style.display = "none";
         }
 
-        // let dailyPlanAll = []; // 더 이상 사용하지 않음 - 이제 getPlanAll() 함수로 직접 데이터를 가져옴
         let employeeall = [];
 
-        // Supabase 함수 호출을 위한 유틸리티 함수들
         async function getPlanAllPromise() {
             return await getPlanAll();
         }
@@ -519,33 +491,23 @@
         }
 
         async function initialize() {
-            showLoading(); // 초기화 시작 시 로딩 표시
+            showLoading();
 
             try {
-                // 직원 정보 로드
                 employeeall = await getEmployeesPromise();
-
-                console.log("데이터 로드 완료");
-                console.log(employeeall);
-                console.log("데이터 로드 완료 확인");
-
-                // 데이터 로드 후 테이블 생성
                 makeTable_plan();
-                console.log("모든 데이터 로드 완료");
             } catch (error) {
                 console.error("초기화 중 오류 발생:", error);
                 showCustomAlert("데이터를 불러오는데 실패했습니다: " + error);
             } finally {
-                hideLoading(); // 성공 여부와 관계없이 로딩 표시 제거
+                hideLoading();
             }
         }
 
         async function getPlanAll_id() {
             showLoading();
             try {
-                // 현재 선택된 날짜로 테이블 새로고침
                 await makeTable_plan();
-                console.log("계획 데이터 새로고침 완료");
             } catch (error) {
                 console.error("데이터 로드 실패:", error);
                 showCustomAlert("데이터를 불러오는데 실패했습니다: " + error);
@@ -558,7 +520,6 @@
             showLoading();
             try {
                 employeeall = await getEmployeesPromise();
-                console.log("직원 데이터 새로고침 완료");
             } catch (error) {
                 console.error("직원 데이터 로드 실패:", error);
                 showCustomAlert("직원 데이터를 불러오는데 실패했습니다: " + error);
@@ -574,7 +535,7 @@
                 const endTime = String(document.getElementById("endTime").value).padStart(4, '0');
 
                 const planData = [
-                    "", // 계획_ID는 Supabase에서 자동 생성됨
+                    "",
                     document.getElementById("planDate").value,
                     "'" + startTime,
                     "'" + endTime,
@@ -661,15 +622,12 @@
         }
 
         function changeDate(dateStr) {
-            // dateStr이 undefined나 null이면 빈 문자열 반환
             if (!dateStr) return '';
 
-            // dateStr이 문자열이 아니면 문자열로 변환
             if (typeof dateStr !== 'string') {
                 dateStr = String(dateStr);
             }
 
-            // 하이픈(-)이 있으면 제거 (yyyy-mm-dd → yyyymmdd)
             return dateStr.replace(/-/g, "");
         }
 
@@ -678,14 +636,13 @@
             const rows = tableBody.getElementsByTagName("tr");
             let missingEntries = [];
 
-            // 각 행을 순회하면서 활동기록이 누락된 항목 확인
             for (let i = 0; i < rows.length; i++) {
                 const cells = rows[i].getElementsByTagName("td");
-                if (cells.length > 0) { // 데이터가 있는 행인 경우만 체크
-                    const startTime = cells[1].textContent.trim(); // 시작시간
-                    const manager = cells[3].textContent.trim();   // 직원명
-                    const activity = cells[4].textContent.trim();  // 활동명
-                    const record = cells[9].textContent.trim();    // 활동기록
+                if (cells.length > 0) {
+                    const startTime = cells[1].textContent.trim();
+                    const manager = cells[3].textContent.trim();
+                    const activity = cells[4].textContent.trim();
+                    const record = cells[9].textContent.trim();
 
                     if (!record) {
                         missingEntries.push(`「${startTime}_${manager}_${activity}」`);
@@ -693,7 +650,6 @@
                 }
             }
 
-            // 알림 메시지 생성
             const noticeTextarea = document.getElementById("noticeTextarea");
             if (missingEntries.length > 0) {
                 const message = "다음의 활동 기록이 누락되었습니다 : \n\n" + missingEntries.join('\n');
@@ -707,43 +663,30 @@
             const selectedDate = changeDate(
                 document.getElementById("datePicker").value
             );
-            console.log("선택된 날짜:", selectedDate);
 
-            // 선택된 날짜가 없으면 return
             if (!selectedDate) {
-                console.log("날짜가 선택되지 않았습니다.");
                 return;
             }
 
-            // 로딩 표시
             showLoading();
 
             try {
-                // 날짜 형식 변환 (YYYYMMDD -> YYYY-MM-DD)
                 const formattedDate = selectedDate.slice(0, 4) + '-' + selectedDate.slice(4, 6) + '-' + selectedDate.slice(6, 8);
-                console.log("변환된 날짜:", formattedDate);
 
-                // 선택된 날짜의 계획 데이터만 가져오기
                 const filteredPlans = await getPlanAll(formattedDate);
-                console.log("가져온 계획 데이터:", filteredPlans.length + "개 항목");
 
-                // 시작시간(인덱스 2)과 직원명(인덱스 5)를 기준으로 기본 정렬
                 filteredPlans.sort((a, b) => {
-                    // 시작시간 비교 (작은따옴표 제거 후 비교)
                     const timeA = a[2].replace(/'/g, "");
                     const timeB = b[2].replace(/'/g, "");
                     if (timeA !== timeB) {
                         return timeA.localeCompare(timeB);
                     }
-                    // 시작시간이 같은 경우 직원명 이름으로 비교
                     return a[5].localeCompare(b[5]);
                 });
 
-                // 테이블 내용 초기화
                 const tableBody = document.getElementById("table-body");
                 tableBody.innerHTML = "";
 
-                // 데이터가 없는 경우 처리
                 if (filteredPlans.length === 0) {
                     const emptyRow = document.createElement("tr");
                     const emptyCell = document.createElement("td");
@@ -754,23 +697,18 @@
                     emptyRow.appendChild(emptyCell);
                     tableBody.appendChild(emptyRow);
 
-                    // 입력 필드의 날짜 설정
                     document.getElementById("planDate").value = selectedDate;
 
-                    // 데이터가 없을 때는 notice 초기화
                     document.getElementById("noticeTextarea").value = "";
                     return;
                 }
 
-                // 필터링된 데이터를 테이블에 추가
                 displaySortedData(filteredPlans);
 
-                // 입력 필드의 날짜 설정
                 document.getElementById("planDate").value = selectedDate;
 
                 resetAllFields();
 
-                // 테이블 생성 후 누락된 활동기록 체크
                 entryCheck();
             } catch (error) {
                 console.error("계획 데이터 로드 중 오류 발생:", error);
@@ -780,8 +718,8 @@
             }
         }
 
-        let currentSortColumn = 1; // 기본 정렬 컬럼 (시작시간)
-        let isAscending = true; // 정렬 방향
+        let currentSortColumn = 1;
+        let isAscending = true;
 
         function displaySortedData(data) {
             const tableBody = document.getElementById("table-body");
@@ -790,17 +728,14 @@
             data.forEach((plan) => {
                 const row = document.createElement("tr");
 
-                // 표시할 컬럼: 날짜(1), 시작시간(2), 종료시간(3), 직원명(5), 활동명(6), 코드(7), 활동장소(8), 준비물품(9), 내용(10), 기록(11)
                 const columns = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11];
 
                 columns.forEach((index) => {
                     const cell = document.createElement("td");
-                    // 모든 데이터를 그대로 표시
                     cell.textContent = plan[index] || "";
                     row.appendChild(cell);
                 });
 
-                // 행 더블클릭 이벤트
                 row.addEventListener("dblclick", function () {
                     fillPlanFields(plan);
                 });
@@ -809,7 +744,6 @@
             });
         }
 
-        // 테이블 헤더 클릭 이벤트 설정
         document.addEventListener("DOMContentLoaded", function () {
 
             const headers = document.querySelectorAll("#plan-table-header th");
@@ -822,22 +756,17 @@
         async function sortTable(columnIndex) {
             const selectedDate = changeDate(document.getElementById("datePicker").value);
             
-            // 선택된 날짜가 없으면 return
             if (!selectedDate) {
-                console.log("날짜가 선택되지 않았습니다.");
                 return;
             }
 
             showLoading();
             
             try {
-                // 날짜 형식 변환 (YYYYMMDD -> YYYY-MM-DD)
                 const formattedDate = selectedDate.slice(0, 4) + '-' + selectedDate.slice(4, 6) + '-' + selectedDate.slice(6, 8);
                 
-                // 선택된 날짜의 계획 데이터만 가져오기
                 let filteredPlans = await getPlanAll(formattedDate);
 
-                // 같은 컬럼을 다시 클릭하면 정렬 방향 전환
                 if (columnIndex === currentSortColumn) {
                     isAscending = !isAscending;
                 } else {
@@ -845,16 +774,13 @@
                     isAscending = true;
                 }
 
-                // 컬럼 인덱스에 따른 실제 데이터 인덱스 매핑
                 const dataIndexMap = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11];
                 const dataIndex = dataIndexMap[columnIndex];
 
-                // 정렬 로직
                 filteredPlans.sort((a, b) => {
                     let valueA = (a[dataIndex] || "").toString().replace(/'/g, "");
                     let valueB = (b[dataIndex] || "").toString().replace(/'/g, "");
 
-                    // 시간 값에 대한 특별 처리
                     if (dataIndex === 2 || dataIndex === 3) {
                         valueA = valueA.padStart(4, '0');
                         valueB = valueB.padStart(4, '0');
@@ -876,61 +802,30 @@
             }
         }
 
-        /**
-         * 계획 필드 채우기
-         * @param {Array} plan - 계획 데이터 배열
-         */
         function fillPlanFields(plan) {
-            // ID(0)
             document.getElementById("planId").value = plan[0] || "";
-            // 날짜(1)
             document.getElementById("planDate").value = plan[1] || "";
-            // 시작시간(2) - 작은따옴표 제거하고 표시
             document.getElementById("startTime").value = (plan[2] || "").replace(/'/g, "").padStart(4, '0');
-            // 종료시간(3) - 작은따옴표 제거하고 표시
             document.getElementById("endTime").value = (plan[3] || "").replace(/'/g, "").padStart(4, '0');
-            // 직원번호(4)
             document.getElementById("employeeId").value = plan[4] || "";
-            // 직원명(5)
             document.getElementById("manager").value = plan[5] || "";
-            // 활동명(6)
             document.getElementById("activityName").value = plan[6] || "";
-            // 코드(7)
             document.getElementById("subcategoryCode").value = plan[7] || "";
-            // 활동장소(8)
             document.getElementById("activityPlace").value = plan[8] || "";
-            // 준비물품(9)
             document.getElementById("preparation").value = plan[9] || "";
-            // 내용및특이사항(10)
             document.getElementById("details").value = plan[10] || "";
-            // 활동기록(11)
             document.getElementById("resultEntryTextarea").value = plan[11] || "";
-            // 참고사진URL(12)
             document.getElementById("imageUrl").value = plan[12] || "";
 
-            // 버튼 상태 업데이트 - 수정/삭제 활성화, 저장 비활성화
             updateButtonStates(false, true, true);
         }
 
-        /**
-         * 버튼 상태 업데이트
-         * @param {boolean} saveEnabled - 저장 버튼 활성화 여부
-         * @param {boolean} modifyEnabled - 수정 버튼 활성화 여부
-         * @param {boolean} deleteEnabled - 삭제 버튼 활성화 여부
-         */
         function updateButtonStates(saveEnabled, modifyEnabled, deleteEnabled) {
             document.getElementById("btn-plan-save").disabled = !saveEnabled;
             document.getElementById("btn-plan-modify").disabled = !modifyEnabled;
             document.getElementById("btn-plan-delete").disabled = !deleteEnabled;
         }
 
-        /**
-         * 코드 필터링 함수
-       * @param {string} searchTerm - 검색어
-         * 소분류코드 모달에서 코드 검색 기능
-         * 검색어에 따라 관련 코드만 표시
-         * 검색어가 없을 경우 모든 코드 표시
-       */
         function filterCodes(searchTerm) {
             searchTerm = searchTerm.toLowerCase();
             const codeListItems = document.querySelectorAll(".code-list li");
@@ -960,11 +855,10 @@
         }
 
         function resetAllFields() {
-            // 모든 입력 필드 초기화
             document.getElementById("planId").value = "";
             document.getElementById("startTime").value = "";
             document.getElementById("endTime").value = "";
-            document.getElementById("employeeId").value = ""; // 직원번호 필드 초기화 추가
+            document.getElementById("employeeId").value = "";
             document.getElementById("activityName").value = "";
             document.getElementById("subcategoryCode").value = "";
             document.getElementById("manager").value = "";
@@ -974,7 +868,6 @@
             document.getElementById("resultEntryTextarea").value = "";
             document.getElementById("imageUrl").value = "";
 
-            // 버튼 상태 업데이트 - 저장 활성화, 수정/삭제 비활성화
             updateButtonStates(true, false, false);
         }
 
@@ -991,7 +884,6 @@
             document.getElementById("customConfirmMessage").textContent = message;
             document.getElementById("customConfirm").style.display = "flex";
 
-            // 확인 버튼 클릭 이벤트 핸들러 설정
             document.getElementById("confirm-ok-btn").onclick = function () {
                 closeCustomConfirm(true);
                 if (typeof onConfirm === 'function') {
@@ -1019,7 +911,6 @@
                 { id: "details", name: "내용및특이사항" }
             ];
 
-            // 모든 필수 필드 검사
             for (const field of requiredFields) {
                 const value = document.getElementById(field.id).value.trim();
                 if (!value) {
@@ -1029,23 +920,16 @@
                 }
             }
 
-            // 참고사진URL 검사 - 값이 있으면 https://로 시작하는지 확인
             const imageUrl = document.getElementById("imageUrl").value.trim();
-            console.log("참고사진URL 검사:", imageUrl);
 
             if (imageUrl !== "") {
                 if (!imageUrl.startsWith("https://")) {
                     showCustomAlert("참고사진URL은 https://로 시작해야 합니다.");
                     document.getElementById("imageUrl").focus();
-                    console.log("참고사진URL 유효성 검사 실패");
                     return false;
                 }
-                console.log("참고사진URL 유효성 검사 성공");
-            } else {
-                console.log("참고사진URL이 비어있어 검사를 건너뜁니다.");
             }
 
-            // 시간 형식 검사
             const timeRegex = /^([0-1][0-9]|2[0-3])[0-5][0-9]$/;
             let startTime = document.getElementById("startTime").value.padStart(4, '0');
             let endTime = document.getElementById("endTime").value.padStart(4, '0');
@@ -1068,7 +952,6 @@
                 return false;
             }
 
-            // 날짜 형식 검사
             const dateRegex = /^[0-9]{8}$/;
             const planDate = document.getElementById("planDate").value;
 
@@ -1077,49 +960,34 @@
                 return false;
             }
 
-            // 시간 중복 검사 함수 호출
             const currentPlanId = document.getElementById("planId").value;
             if (!(await checkRightTime(planDate, startTime, endTime, currentPlanId))) {
                 return false;
             }
 
-            console.log("모든 유효성 검사 통과");
             return true;
         }
 
-        // 시간 중복 검사 함수
         async function checkRightTime(planDate, startTime, endTime, currentPlanId) {
-            // 입력한 시작시간, 종료시간을 분 단위로 변환
             const inputStartMinutes = convertTimeToMinutes(startTime);
             const inputEndMinutes = convertTimeToMinutes(endTime);
 
             try {
-                // 날짜 형식 변환 (YYYYMMDD -> YYYY-MM-DD)
                 const formattedDate = planDate.slice(0, 4) + '-' + planDate.slice(4, 6) + '-' + planDate.slice(6, 8);
                 
-                // 현재 선택된 날짜에 해당하는 계획들만 가져오기
                 const sameDatePlans = await getPlanAll(formattedDate);
 
-                // 중복 검사
                 for (const plan of sameDatePlans) {
-                    // 수정 시 자기 자신의 계획은 건너뜀
                     if (currentPlanId && plan[0] === currentPlanId) {
                         continue;
                     }
 
-                    // 계획의 시작시간과 종료시간을 분 단위로 변환
                     const planStartTime = plan[2].replace(/'/g, "").padStart(4, '0');
                     const planEndTime = plan[3].replace(/'/g, "").padStart(4, '0');
                     const planStartMinutes = convertTimeToMinutes(planStartTime);
                     const planEndMinutes = convertTimeToMinutes(planEndTime);
 
-                    // 중복 체크 로직:
-                    // 1. 입력 시간이 기존 계획 시간 범위 내에 있는 경우
-                    // 2. 기존 계획 시간이 입력 시간 범위 내에 있는 경우
-                    // 3. 입력 시간이 기존 계획 시간을 완전히 포함하는 경우
-                    // 4. 완전히 동일한 시간은 허용
                     if (planStartMinutes === inputStartMinutes && planEndMinutes === inputEndMinutes) {
-                        // 완전히 동일한 시간은 허용
                         continue;
                     }
 
@@ -1127,10 +995,9 @@
                         (inputEndMinutes > planStartMinutes && inputEndMinutes <= planEndMinutes) ||
                         (inputStartMinutes <= planStartMinutes && inputEndMinutes >= planEndMinutes)) {
 
-                        // HH:MM 형식으로 변환하여, 직원명과 시간을 표시
                         const planStartTimeFormatted = formatTime(planStartTime);
                         const planEndTimeFormatted = formatTime(planEndTime);
-                        const staffName = plan[5]; // 직원명은 인덱스 5
+                        const staffName = plan[5];
 
                         showCustomAlert(`입력한 시간이 ${staffName}님의 기존 계획 (${planStartTimeFormatted}~${planEndTimeFormatted})과 중복됩니다.`);
                         return false;
@@ -1140,53 +1007,42 @@
                 return true;
             } catch (error) {
                 console.error("시간 중복 검사 중 오류 발생:", error);
-                // 오류 발생 시 중복 검사를 건너뛰고 true 반환
                 return true;
             }
         }
 
-        // 시간(HHMM)을 분으로 변환하는 함수
         function convertTimeToMinutes(timeStr) {
             const hours = parseInt(timeStr.substring(0, 2));
             const minutes = parseInt(timeStr.substring(2, 4));
             return hours * 60 + minutes;
         }
 
-        // 시간(HHMM)을 HH:MM 형식으로 변환하는 함수
         function formatTime(timeStr) {
             return `${timeStr.substring(0, 2)}:${timeStr.substring(2, 4)}`;
         }
 
-        // 페이지 로드 시 초기화 및 데이터 로드
         document.addEventListener("DOMContentLoaded", function () {
             initSupabase();
 
-            // 오늘 날짜를 YYYY-MM-DD 형식으로 설정
             const today = new Date().toISOString().split("T")[0];
             document.getElementById("datePicker").value = today;
 
-            // 초기 버튼 상태 설정 - 저장 버튼만 활성화
             updateButtonStates(true, false, false);
 
-            // 초기화 함수 호출 (한 번만 호출)
             initialize();
 
-            // 소분류코드 입력 필드 클릭 이벤트 리스너
             document.getElementById("subcategoryCode").addEventListener("click", function () {
                 document.getElementById("subcategoryCodeModal").style.display = "block";
             });
 
-            // 소분류코드 모달 닫기 버튼 이벤트 리스너
             document.getElementById("close-code-modal").addEventListener("click", function () {
                 document.getElementById("subcategoryCodeModal").style.display = "none";
             });
 
-            // 소분류코드 검색 기능
             document.getElementById("codeSearchBox").addEventListener("input", function () {
                 filterCodes(this.value);
             });
 
-            // 소분류코드 선택 이벤트
             document.querySelectorAll(".code-list li").forEach(function (item) {
                 item.addEventListener("dblclick", function () {
                     document.getElementById("subcategoryCode").value = this.textContent;
@@ -1194,7 +1050,6 @@
                 });
             });
 
-            // 모달 외부 클릭 시 닫기
             window.addEventListener("click", function (event) {
                 const modal = document.getElementById("subcategoryCodeModal");
                 if (event.target === modal) {
@@ -1208,35 +1063,29 @@
 
                 const picModalBackdrop = document.getElementById("picModalBackdrop");
                 if (event.target === picModalBackdrop) {
-                    // 사진 URL 모달이 열려있으면 그것만 닫기
                     const picModal = document.getElementById("picModal");
                     if (picModal.style.display === "block") {
                         picModal.style.display = "none";
                     }
-                    // 그렇지 않으면 관리자 모달 닫기
                     else {
                         closePicManagerModal();
                     }
                 }
             });
 
-            // 직원명 입력 필드 클릭 이벤트 리스너
             document.getElementById("manager").addEventListener("click", function () {
                 document.getElementById("staffSelectModal").style.display = "block";
-                populateStaffTable(employeeall); // 직원 목록 로드
+                populateStaffTable(employeeall);
             });
 
-            // 직원명 모달 닫기 버튼 이벤트 리스너
             document.getElementById("close-staff-btn").addEventListener("click", function () {
                 document.getElementById("staffSelectModal").style.display = "none";
             });
 
-            // 직원명 검색 기능
             document.getElementById("staffSearchBox").addEventListener("input", function () {
                 filterStaffList(this.value);
             });
 
-            // 직원명 초기화 버튼 이벤트 리스너
             document.getElementById("resetManagerBtn").addEventListener("click", function () {
                 showCustomConfirm("선택된 모든 직원명를 초기화하시겠습니까?", function () {
                     document.getElementById("employeeId").value = "";
@@ -1245,11 +1094,8 @@
                 });
             });
 
-            // 저장 버튼 이벤트 리스너
             document.getElementById("btn-plan-save").addEventListener("click", async function () {
-                console.log("저장 버튼 클릭");
                 const isValid = await validatePlanInputs();
-                console.log("유효성 검사 결과:", isValid);
 
                 if (isValid) {
                     showCustomConfirm("계획을 저장하시겠습니까?", function () {
@@ -1258,11 +1104,8 @@
                 }
             });
 
-            // 수정 버튼 이벤트 리스너
             document.getElementById("btn-plan-modify").addEventListener("click", async function () {
-                console.log("수정 버튼 클릭");
                 const isValid = await validatePlanInputs();
-                console.log("유효성 검사 결과:", isValid);
 
                 if (isValid) {
                     showCustomConfirm("선택한 계획을 수정하시겠습니까?", function () {
@@ -1271,7 +1114,6 @@
                 }
             });
 
-            // 삭제 버튼 이벤트 리스너
             document.getElementById("btn-plan-delete").addEventListener("click", function () {
                 const planId = document.getElementById("planId").value;
 
@@ -1285,62 +1127,49 @@
                 });
             });
 
-            // 조회 버튼 이벤트 리스너
             document.getElementById("btn-plan-search").addEventListener("click", function () {
                 getPlanAll_id();
             });
 
-            // 참고사진 URL 입력 필드 클릭 이벤트
             document.getElementById("imageUrl").addEventListener("click", function () {
                 openPicManagerModal();
             });
 
-            // 활동 사진 URL 관리 모달 관련 이벤트 리스너 설정
             if (document.getElementById("picManagerCloseButton")) {
                 document.getElementById("picManagerCloseButton").addEventListener("click", closePicManagerModal);
             }
 
-            // 사진 추가 버튼 이벤트
             if (document.getElementById("picAddButton")) {
                 document.getElementById("picAddButton").addEventListener("click", openNewModal);
             }
 
-            // 입력 취소 버튼 이벤트
             if (document.getElementById("picCancelInputButton")) {
                 document.getElementById("picCancelInputButton").addEventListener("click", function () {
-                    // 참고사진URL 입력필드를 빈칸으로 설정
                     document.getElementById("imageUrl").value = "";
-                    // 모달창 닫기
                     closePicManagerModal();
                 });
             }
 
-            // 사진 URL 모달 닫기 버튼 이벤트
             if (document.getElementById("picCloseButton")) {
                 document.getElementById("picCloseButton").addEventListener("click", closeModal);
             }
 
-            // 사진 URL 모달 취소 버튼 이벤트
             if (document.getElementById("picCancelButton")) {
                 document.getElementById("picCancelButton").addEventListener("click", closeModal);
             }
 
-            // 사진 URL 모달 확인 버튼 이벤트
             if (document.getElementById("picConfirmButton")) {
                 document.getElementById("picConfirmButton").addEventListener("click", handleConfirm);
             }
 
-            // 이미지 미리보기 버튼 이벤트
             if (document.getElementById("picPreviewButton")) {
                 document.getElementById("picPreviewButton").addEventListener("click", previewImage);
             }
 
-            // 필터 입력 이벤트
             if (document.getElementById("picFilterInput")) {
                 document.getElementById("picFilterInput").addEventListener("input", handleFilterInput);
             }
 
-            // 필터 클리어 버튼 이벤트
             if (document.getElementById("picFilterClearButton")) {
                 document.getElementById("picFilterClearButton").addEventListener("click", clearFilter);
             }
@@ -1348,63 +1177,51 @@
 
         function populateStaffTable(staffData) {
             const tableBody = document.getElementById("staff-list-body");
-            tableBody.innerHTML = ""; // 테이블 초기화
+            tableBody.innerHTML = "";
 
-            // 선택된 날짜 가져오기 (YYYYMMDD 형식)
             const selectedDate = changeDate(document.getElementById("datePicker").value);
 
-            // 계약기간 내에 있는 직원들을 필터링하고 저장할 배열
             let filteredStaff = [];
 
-            // 헤더 행은 제외하고 데이터 행부터 처리
             for (let i = 1; i < staffData.length; i++) {
-                // 계약시작일(인덱스 2)과 계약종료일(인덱스 3) 가져오기
                 const startDate = staffData[i][2] || "";
                 const endDate = staffData[i][3] || "";
 
-                // 날짜 비교: 선택된 날짜가 계약기간 내에 있는지 확인
                 if (startDate && selectedDate >= startDate &&
                     (!endDate || selectedDate <= endDate)) {
-                    // 필터링된 직원 데이터 저장
                     filteredStaff.push(staffData[i]);
                 }
             }
 
-            // 이름(인덱스 1)을 기준으로 오름차순 정렬
             filteredStaff.sort((a, b) => {
                 const nameA = a[1] || "";
                 const nameB = b[1] || "";
-                return nameA.localeCompare(nameB); // 한글 이름 정렬 지원
+                return nameA.localeCompare(nameB);
             });
 
-            // 정렬된 직원 데이터를 테이블에 추가
             for (let i = 0; i < filteredStaff.length; i++) {
                 const row = document.createElement("tr");
 
-                // 직원번호(인덱스 0)와 이름(인덱스 1) 컬럼
                 const idCell = document.createElement("td");
-                idCell.textContent = filteredStaff[i][0] || ""; // 직원번호
+                idCell.textContent = filteredStaff[i][0] || "";
 
                 const nameCell = document.createElement("td");
-                nameCell.textContent = filteredStaff[i][1] || ""; // 직원명
+                nameCell.textContent = filteredStaff[i][1] || "";
 
                 row.appendChild(idCell);
                 row.appendChild(nameCell);
 
-                // 행 더블클릭 이벤트
                 row.addEventListener("dblclick", function () {
                     const currentEmployeeId = document.getElementById("employeeId").value;
                     const currentManager = document.getElementById("manager").value;
                     const newEmployeeId = filteredStaff[i][0] || "";
                     const newManager = filteredStaff[i][1] || "";
 
-                    // 이미 선택된 직원명인지 확인
                     if (currentManager.split(",").map(m => m.trim()).includes(newManager)) {
                         showCustomAlert("이미 선택된 직원명입니다.");
                         return;
                     }
 
-                    // 기존 값이 있으면 콤마로 구분하여 추가
                     document.getElementById("employeeId").value = currentEmployeeId
                         ? currentEmployeeId + ", " + newEmployeeId
                         : newEmployeeId;
@@ -1419,7 +1236,6 @@
                 tableBody.appendChild(row);
             }
 
-            // 표시할 직원이 없는 경우 메시지 표시
             if (filteredStaff.length === 0) {
                 const row = document.createElement("tr");
                 const cell = document.createElement("td");
@@ -1448,13 +1264,11 @@
             });
         }
 
-        // 활동 사진 URL 관리 모달 관련 함수들
         let currentRowId = null;
         let isEditing = false;
         let isViewOnly = false;
-        let allActivityData = []; // 모든 활동 데이터를 저장하는 배열
+        let allActivityData = [];
 
-        // 관리자 모달 열기
         function openPicManagerModal() {
             const picManagerSystem = document.getElementById('picManagerSystem');
             const picModalBackdrop = document.getElementById('picModalBackdrop');
@@ -1464,14 +1278,11 @@
             picModalBackdrop.style.display = 'block';
             picManagerModal.style.display = 'block';
 
-            // 필터 초기화
             clearFilter();
 
-            // 데이터 로드
             refreshTable();
         }
 
-        // 관리자 모달 닫기
         function closePicManagerModal() {
             const picManagerSystem = document.getElementById('picManagerSystem');
             const picModalBackdrop = document.getElementById('picModalBackdrop');
@@ -1481,23 +1292,18 @@
             picModalBackdrop.style.display = 'none';
             picManagerModal.style.display = 'none';
 
-            // 사진 URL 모달도 닫기
             closeModal();
         }
 
-        // 테이블 새로고침
         function refreshTable() {
             fetchActivityPics()
                 .then(data => {
-                    // 모든 데이터 저장
                     allActivityData = data || [];
 
-                    // 활동명 기준으로 오름차순 정렬
                     allActivityData.sort((a, b) => {
                         return a.활동명.localeCompare(b.활동명, 'ko-KR');
                     });
 
-                    // 현재 필터 적용
                     const filterValue = document.getElementById('picFilterInput').value.trim().toLowerCase();
                     if (filterValue) {
                         filterTable(filterValue);
@@ -1511,19 +1317,16 @@
                 });
         }
 
-        // URL 텍스트 자르기
         function truncateUrl(url) {
             return url.length > 30 ? url.substring(0, 30) + '...' : url;
         }
 
-        // 모달 열기 (새 항목 추가)
         function openNewModal() {
             resetModal();
             isEditing = false;
             isViewOnly = false;
             currentRowId = null;
 
-            // 입력 필드 편집 가능하게 설정
             document.getElementById('picActivityName').readOnly = false;
             document.getElementById('picUrl').readOnly = false;
             document.getElementById('picPreviewButton').disabled = false;
@@ -1532,7 +1335,6 @@
             document.getElementById('picActivityName').focus();
         }
 
-        // 모달 열기 (조회 전용 - 더블클릭 시)
         function openViewModal(id, activityName, url) {
             resetModal();
             isEditing = false;
@@ -1542,7 +1344,6 @@
             document.getElementById('picActivityName').value = activityName;
             document.getElementById('picUrl').value = url;
 
-            // 입력 필드 읽기 전용으로 설정
             document.getElementById('picActivityName').readOnly = true;
             document.getElementById('picUrl').readOnly = true;
             document.getElementById('picPreviewButton').disabled = true;
@@ -1551,25 +1352,21 @@
                 document.getElementById('picPreviewImage').src = url;
             }
 
-            // 항상 보이도록 설정
             document.getElementById('picPreviewContainer').style.display = 'block';
 
             document.getElementById('picModal').style.display = 'block';
         }
 
-        // 모달 닫기
         function closeModal() {
             document.getElementById('picModal').style.display = 'none';
             resetModal();
         }
 
-        // 모달 초기화
         function resetModal() {
             document.getElementById('picActivityName').value = '';
             document.getElementById('picUrl').value = '';
             document.getElementById('picPreviewImage').src = '';
 
-            // 입력 필드 상태 초기화
             document.getElementById('picActivityName').readOnly = false;
             document.getElementById('picUrl').readOnly = false;
             document.getElementById('picPreviewButton').disabled = false;
@@ -1577,7 +1374,6 @@
             isViewOnly = false;
         }
 
-        // 이미지 미리보기
         function previewImage() {
             const url = document.getElementById('picUrl').value.trim();
             const picPreviewImage = document.getElementById('picPreviewImage');
@@ -1589,27 +1385,22 @@
 
             picPreviewImage.src = url;
 
-            // 이미지 로드 오류 처리
             picPreviewImage.onerror = function () {
                 console.error('이미지를 불러올 수 없습니다:', url);
                 picPreviewImage.src = '';
             };
         }
 
-        // 필터 처리 함수
         function handleFilterInput() {
             const picFilterInput = document.getElementById('picFilterInput');
             const picFilterClearButton = document.getElementById('picFilterClearButton');
             const filterValue = picFilterInput.value.trim().toLowerCase();
 
-            // 클리어 버튼 표시/숨김 설정
             picFilterClearButton.style.display = filterValue ? 'block' : 'none';
 
-            // 필터링 적용
             filterTable(filterValue);
         }
 
-        // 필터 초기화
         function clearFilter() {
             const picFilterInput = document.getElementById('picFilterInput');
             const picFilterClearButton = document.getElementById('picFilterClearButton');
@@ -1619,21 +1410,17 @@
             filterTable('');
         }
 
-        // 테이블 필터링
         function filterTable(filterValue) {
             if (!allActivityData.length) return;
 
-            // 모든 데이터를 필터링
             const filteredData = filterValue
                 ? allActivityData.filter(item =>
                     item.활동명.toLowerCase().includes(filterValue))
                 : allActivityData;
 
-            // 필터링된 데이터로 테이블 렌더링
             renderFilteredTable(filteredData, filterValue);
         }
 
-        // 필터링된 테이블 렌더링
         function renderFilteredTable(data, filterValue) {
             const picTableBody = document.getElementById('picTableBody');
             picTableBody.innerHTML = '';
@@ -1642,10 +1429,8 @@
                 const emptyRow = document.createElement('tr');
 
                 if (filterValue) {
-                    // 검색 결과가 없는 경우
                     emptyRow.innerHTML = `<td colspan="3" class="pic-no-results">검색 결과가 없습니다: "${filterValue}"</td>`;
                 } else {
-                    // 데이터가 없는 경우
                     emptyRow.innerHTML = '<td colspan="3" style="text-align: center;">데이터가 없습니다.</td>';
                 }
 
@@ -1660,7 +1445,6 @@
                 row.setAttribute('data-activity-name', item.활동명);
                 row.setAttribute('data-pic-url', item.url주소);
 
-                // 검색어 하이라이트 처리
                 let displayName = item.활동명;
                 if (filterValue) {
                     const regex = new RegExp(`(${filterValue})`, 'gi');
@@ -1677,21 +1461,18 @@
 
                 picTableBody.appendChild(row);
 
-                // 더블클릭 이벤트 추가 - URL 선택 및 모달 닫기
                 row.addEventListener('dblclick', function () {
                     const id = this.getAttribute('data-id');
                     const activityName = this.getAttribute('data-activity-name');
                     const url = this.getAttribute('data-pic-url');
 
-                    // URL 모달을 열고 정보 표시
                     openViewModal(id, activityName, url);
                 });
             });
 
-            // 삭제 버튼 이벤트 추가
             document.querySelectorAll('.pic-delete-button').forEach(button => {
                 button.addEventListener('click', function (e) {
-                    e.stopPropagation(); // 이벤트 버블링 방지
+                    e.stopPropagation();
                     const id = this.getAttribute('data-id');
 
                     showCustomConfirm('정말로 이 항목을 삭제하시겠습니까?', function () {
@@ -1704,9 +1485,7 @@
             });
         }
 
-        // 확인 버튼 클릭 시 실행되는 함수
         function handleConfirm() {
-            // 조회 전용 모드일 경우 URL 값을 전달하고 모달 닫기
             if (isViewOnly) {
                 const url = document.getElementById('picUrl').value.trim();
                 document.getElementById('imageUrl').value = url;
@@ -1729,7 +1508,6 @@
             }
 
             if (isEditing) {
-                // 기존 항목 업데이트
                 updateActivityPic(currentRowId, activityName, url)
                     .then(() => {
                         closeModal();
@@ -1740,7 +1518,6 @@
                         showCustomAlert('데이터 저장 중 오류가 발생했습니다.');
                     });
             } else {
-                // 새 항목인 경우 확인 메시지 표시
                 showCustomConfirm('입력한 정보를 저장하시겠습니까?', function () {
                     addActivityPic(activityName, url)
                         .then(() => {
@@ -1756,12 +1533,9 @@
         }
     </script>
 
-    <!-- 활동 사진 URL 관리 모달 시스템 -->
     <div id="picManagerSystem" style="display: none;">
-        <!-- 모달 배경 -->
         <div id="picModalBackdrop" class="pic-modal-backdrop"></div>
 
-        <!-- 관리자 모달 -->
         <div id="picManagerModal" class="pic-modal pic-manager-modal">
             <div class="pic-modal-header">
                 <h2 style="font-size: 16px; margin: 0;">활동 사진 URL 관리</h2>
@@ -1787,14 +1561,12 @@
                             </tr>
                         </thead>
                         <tbody id="picTableBody">
-                            <!-- 데이터가 여기에 동적으로 추가됩니다 -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- 사진 URL 모달 -->
         <div id="picModal" class="pic-modal">
             <div class="pic-modal-header">
                 <h2 style="font-size: 16px; margin: 0;">활동 사진 URL</h2>
